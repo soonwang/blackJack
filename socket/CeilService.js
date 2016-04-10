@@ -3,51 +3,38 @@
  */
 
 var uuid = require('node-uuid');
+var Ceil = require('../bean/Ceil');
+var CeilList = require('../model/CeilList');
 
-var CeilService = (function(ceilList) {
+var CeilService = (function() {
     /**
      * 添加房间
      * @param message
      */
     var addCeil = function(message) {
 
-        var ceil = {
-            id: uuid.v4(),
-            blanker: message.blanker,
-            player: null,
-            isActive: true,
-        };
-        ceilList.push(ceil);
+        var ceil = Ceil(uuid.v4(), message.blanker, message.player);
+        CeilList.addCeil(ceil);
 
     };
 
     //删除房间
     var delCeil = function(message) {
-        ceilList.map(function (ceil) {
-            if(ceil.id === message.ceil.id) {
-                ceilList.splice(cailList.indexOf(ceil), 1);
-            }
-        });
+        CeilList.delCeil(message.ceil.id);
     }
 
     //进入房间
     var enterCeil = function(message) {
 
-        ceilList.map(function(ceil) {
-            if(ceil.id === message.ceil.id && ceil.player === null) {
-                ceil.player = message.player;
-            }
-        });
+        var newCeil = Ceil(message.ceil.id, message.blanker, message.player);
+        CeilService.updateCeil(newCeil);
 
     };
 
     //退出房间
     var exitCeil = function(message) {
-        ceilList.map(function (ceil) {
-            if(ceil.id === message.ceil.id) {
-                ceil.player = null;
-            }
-        })
+        var newCeil = Ceil(message.ceil.id, message.blanker, null);
+        CeilService.updateCeil(newCeil);
     };
 
     return {
@@ -56,6 +43,6 @@ var CeilService = (function(ceilList) {
         enterCeil: enterCeil,
         exitCeil: exitCeil
     }
-})(ceilList);
+})();
 
 module.exports = CeilService;

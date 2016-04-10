@@ -5,14 +5,8 @@
 var uuid = require('node-uuid');
 var CeilService = require('./CeilService');
 var UserService = require('./UserService');
-
-//所有用户列表
-var userList = [];
-//所有房间列表
-var ceilList = [];
-
-
-
+var BlankerService = require('./BlankerService');
+var PlayerService = require('./PlayerService');
 
 var socketHandler = function(ws) {
 
@@ -36,7 +30,7 @@ var socketHandler = function(ws) {
         type: player,
         ceil: ceil,
         data: {
-            type: 'hit', //'stand', 'bust', 'again'
+            action: 'hit', //'stand', 'bust', 'again'
             card: 'club01'
         },
         timestamp: new Date()
@@ -45,44 +39,33 @@ var socketHandler = function(ws) {
         type: blanker,
         ceil: ceil,
         data: {
-            type: 'hit', //'stand', 'bust'
+            action: 'hit', //'stand', 'bust'
             card: 'club02'
         },
         timestamp: new Date()
     }
-
     
-
-    
-    var toBlanker = function(message) {
-
-    };
-    var toPlayer = function(message) {
-
-    };
-    
-
     ws.on('message', function(message) {
         var jsonMessage = JSON.parse(message);
 
         switch(jsonMessage.type) {
             case 'login':
-                UserService(userList).addUser(jsonMessage);
+                UserService.addUser(jsonMessage);
                 break;
             case 'addCeil':
-                CeilService(ceilList).addCeil(jsonMessage);
+                CeilService.addCeil(jsonMessage);
                 break;
             case 'enterCeil':
-                CeilService(ceilList).enterCeil(jsonMessage);
+                CeilService.enterCeil(jsonMessage);
                 break;
             case 'player':
-                toBlanker(jsonMessage);
+                BlankerService.handle(jsonMessage);
                 break;
             case 'blanker':
-                toPlayer(jsonMessage);
+                PlayerService.handle(jsonMessage);
                 break;
             case 'close':
-                UserService(userList).delUser(jsonMessage);
+                UserService.delUser(jsonMessage);
                 break;
             default:
                 console.log('default...');

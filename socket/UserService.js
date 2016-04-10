@@ -2,20 +2,20 @@
  * Created by wangsong3635 on 2016/4/10.
  */
 var uuid = require('node-uuid');
+var User = require('../bean/User');
+var UserList = require('../model/UserList');
 
-var UserService = (function(userList) {
+var UserService = (function() {
 
     /**
      * 添加用户到userList中
      * @param message
      */
     var addUser = function(message) {
-        var user = {
-            id: uuid.v1(),
-            nickname: message.nickname,
-            ws: ws
-        };
-        userList.push(user);
+        
+        var user = User(uuid.v1(), message.nickname, ws);
+        
+        UserList.addUser(user);
     };
 
     /**
@@ -23,7 +23,7 @@ var UserService = (function(userList) {
      * @param message
      */
     var delUser = function (message) {
-
+        UserList.delUser(message.id);
     };
 
     return {
@@ -31,6 +31,6 @@ var UserService = (function(userList) {
         delUser: delUser
     };
 
-})(userList);
+})();
 
 module.exports = UserService;
