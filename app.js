@@ -13,6 +13,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var socketHandler = require('./socket/socketHandler');
 
 var app = express();
 
@@ -61,15 +62,8 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 wss.on('connection', function(ws) {
-    ws.on('message', function(message) {
-        console.log('received: ' + message);
-        ws.send('{"id": "12","content": "你好，我是服务器"}');
-    });
-    ws.on('close', function() {
-        console.log("closed...");
-    });
+    socketHandler(ws);
 });
 server.on('request', app);
 server.listen(port, function() {

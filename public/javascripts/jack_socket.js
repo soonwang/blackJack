@@ -11,10 +11,13 @@ var jack_socket = (function() {
 
     ws.onmessage = function(event) {
 
-        console.log('received: ' + event.data);
-        console.log(typeof event.data);
-        var json_data = JSON.parse(event.data);
-        console.log(json_data);
+
+        if(typeof event.data === 'object') {
+            var json_data = JSON.parse(event.data);
+            console.log("received a json data :" + json_data);
+        } else if(typeof event.data === 'string') {
+            console.log('received a string : ' + event.data);
+        }
 
     };
 
