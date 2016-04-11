@@ -7,37 +7,55 @@ var User = require('../bean/User');
 var CeilList = require('../model/CeilList');
 
 var BlankerService = (function() {
-    
+
+    /**
+     * 玩家发送的信息，由BlankerService处理
+     * @type {{type: string, ceilId: *, data: {action: string, card: string}}}
+     */
+
+    // var player = {
+    //     type: 'player',
+    //     ceilId: ceilId,
+    //     data: {
+    //         action: 'hit', //'stand', 'bust', 'again'
+    //         card: 'club01'
+    //     }
+    // };
+
+    /**
+     * 玩家点击hit，并将产生的card发送到服务器，由服务器进行转发
+     * @param message
+     */
     var handleHit = function(message) {
-        var ceil = Ceil(message.ceil.id, message.blanker, message.player);
+        var ceil = CeilList.findCeil(message.CeilId);
         var blanker = ceil.getBlanker();
         var ws = blanker.getWs();
-        ws.send(message.data);
+        ws.send(JSON.stringify(message.data));
     };
     
     var handleStand = function(message) {
-        var ceil = Ceil(message.ceil.id, message.blanker, message.player);
+        var ceil = CeilList.findCeil(message.CeilId);
         var blanker = ceil.getBlanker();
         var ws = blanker.getWs();
-        ws.send(message.data);
+        ws.send(JSON.stringify(message.data));
     };
     
     var handleBust = function(message) {
-        var ceil = Ceil(message.ceil.id, message.blanker, message.player);
+        var ceil = CeilList.findCeil(message.CeilId);
         var blanker = ceil.getBlanker();
         var ws = blanker.getWs();
-        ws.send(message.data);
+        ws.send(JSON.stringify(message.data));
     };
     
     var handleAgain = function (message) {
-        var ceil = Ceil(message.ceil.id, message.blanker, message.player);
+        var ceil = CeilList.findCeil(message.CeilId);
         var blanker = ceil.getBlanker();
         var ws = blanker.getWs();
-        ws.send(message.data);
+        ws.send(JSON.stringify(message.data));
     };
     
     var handleDefault = function(message) {
-        console.log("default..");
+        console.log("BlankerService default..");
     };
     var handle = function(message) {
         switch (message.data.action) {

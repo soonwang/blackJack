@@ -3,14 +3,15 @@
  */
 /**
  * 房间数据模型
- * @type {{id: string, blanker: user, player: user}}
+ * @type {{id: string, blankerId: userId, playerId: userId}}
  */
-var Ceil = function(id, blanker, player) {
+var Ceil = function(id, name, blankerId, playerId) {
 
     function ceil() {
         this.id = id;
-        this.blanker = blanker;
-        this.player = player;
+        this.name = name;
+        this.blankerId = blankerId;
+        this.playerId = playerId;
     };
 
     ceil.prototype = {
@@ -21,17 +22,23 @@ var Ceil = function(id, blanker, player) {
         setId: function(id) {
             this.id = id;
         },
-        getBlanker: function() {
-            return this.blanker;
+        getName: function() {
+            return this.name;
         },
-        setBlanker: function(blanker) {
-            this.blanker = blanker;
+        setName: function(name) {
+            this.name = name;
         },
-        getPlayer: function() {
-            return this.player;        
+        getBlankerId: function() {
+            return this.blankerId;
         },
-        setPlayer: function(player) {
-            this.player = player;
+        setBlankerId: function(blankerId) {
+            this.blankerId = blankerId;
+        },
+        getPlayerId: function() {
+            return this.playerId;        
+        },
+        setPlayerId: function(playerId) {
+            this.playerId = playerId;
         }
     };
 

@@ -5,43 +5,89 @@
 var uuid = require('node-uuid');
 var Ceil = require('../bean/Ceil');
 var CeilList = require('../model/CeilList');
+var Const = require('../utils/Const');
 
 var CeilService = (function() {
-    /**
-     * 添加房间
-     * @param message
-     */
-    var addCeil = function(message) {
 
-        var ceil = Ceil(uuid.v4(), message.blanker, message.player);
+    var handle = function(message) {
+        switch (message.data.action) {
+            case Const.ACTION.ADD:
+                addCeil(message.data);
+                break;
+            case Const.ACTION.ENTER:
+                enterCeil(message.data);
+                break;
+            case Const.ACTION.EXIT:
+                exitCeil(message.data);
+                break;
+            case Const.ACTION.DELETE:
+                delCeil(message.data);
+                break;
+            default:
+                handleDefault();
+                break;
+        }
+    };
+
+    //添加房间
+    // var ceil = {
+    //     type: 'ceil',
+    //     data: {
+    //         action: 'add',
+    //         name: 'name',
+    //         blankerId: 'userId'
+    //     },
+    var addCeil = function(data) {
+        
+        var ceil = Ceil(uuid.v4(), data.name, data.blankerId, null);
         CeilList.addCeil(ceil);
 
     };
 
     //删除房间
-    var delCeil = function(message) {
-        CeilList.delCeil(message.ceil.id);
+    //     data: {
+    //         action: 'delete',
+    //         ceilId: 'ceilId',
+    //         blankerId: 'userId'
+    //     }
+    var delCeil = function(data) {
+        CeilList.delCeil(data.ceilId);
     }
 
     //进入房间
-    var enterCeil = function(message) {
+    //     data: {
+    //         action: 'enter',
+    //         ceilId: 'ceilId',
+    //         name: 'name',
+    //         playerId: 'userId'
+    //         blankerId: 'userId
+    //     },
+    var enterCeil = function(data) {
 
-        var newCeil = Ceil(message.ceil.id, message.blanker, message.player);
+        var newCeil = Ceil(data.ceilId, data.name, data.blankerId, data.playerId);
         CeilService.updateCeil(newCeil);
 
     };
 
     //退出房间
-    var exitCeil = function(message) {
-        var newCeil = Ceil(message.ceil.id, message.blanker, null);
+    //     data: {
+    //         action: 'exit',
+    //         ceilId: 'ceilId',
+    //         name: 'name'
+    //         playerId: 'userId'
+    //     },
+
+    var exitCeil = function(data) {
+        var newCeil = Ceil(data.ceilId, data.name, data.blankerId, null);
         CeilService.updateCeil(newCeil);
     };
 
+    var handleDefault = function () {
+        console.log('CeilService default...');
+    }
+
     return {
-        addCeil: addCeil,
-        delCeil: delCeil,
-        enterCeil: enterCeil,
-        exitCeil: exitCeil
+        handle: handle
     }
 })();
 

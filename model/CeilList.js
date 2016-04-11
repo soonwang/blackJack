@@ -32,12 +32,16 @@ var CeilList = (function() {
         });
         return newList[0];
     };
+    var getAllCeil = function() {
+        return ceilList.concat();
+    };
 
     return {
         addCeil: addCeil,
         delCeil: delCeil,
         updateCeil: updateCeil,
-        findCeil: findCeil
+        findCeil: findCeil,
+        getAllCeil: getAllCeil
     };
 })();
 

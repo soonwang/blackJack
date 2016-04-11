@@ -34,11 +34,16 @@ var UserList = (function() {
         return newList[0];
     };
 
+    var getAllUser = function() {
+        return userList.concat();
+    }
+
     return {
         addUser: addUser,
         delUser: delUser,
         updateUser: updateUser,
-        findUser: findUser
+        findUser: findUser,
+        getAllUser: getAllUser
     };
 }) ();
 
