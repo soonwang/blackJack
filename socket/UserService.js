@@ -34,6 +34,12 @@ var UserService = (function() {
         var user = User(uuid.v1(), data.nickname, ws);
         
         UserList.addUser(user);
+        var data = {
+            type: 'callbackLogin',
+            userId: user.getId(),
+            nickname: user.getNickname()
+        };
+        ws.send(JSON.stringify(data));
     };
 
     /**

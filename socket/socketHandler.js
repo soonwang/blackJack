@@ -12,12 +12,13 @@ var BroadcastService = require('./BroadcastService');
 var socketHandler = function(ws) {
 
     ws.on('message', function(message) {
+        console.log(message);
         var jsonMessage = JSON.parse(message);
 
         switch(jsonMessage.type) {
             case Const.TYPE.USER:
                 UserService.handle(jsonMessage, ws);
-                BroadcastService.UpdateUser();
+                BroadcastService.updateUser();
                 break;
             case Const.TYPE.CEIL:
                 CeilService.handle(jsonMessage);

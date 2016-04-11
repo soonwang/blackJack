@@ -26,6 +26,9 @@ var Const = {
         BUST: 'bust',
         AGAIN: 'again'
 
+    },
+    RETURN: {
+
     }
 };
 

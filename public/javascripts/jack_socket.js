@@ -6,7 +6,14 @@ var jack_socket = (function() {
 
     ws.onopen = function() {
         console.log('opened...');
-        ws.send('{"id": "1", "content": "我是客户端，接收到服务器的消息"}');
+        var user = {
+            type: 'user',
+            data: {
+                action: 'login',
+                nickname: 'wangsong'
+            }
+        };
+        ws.send(JSON.stringify(user));
     };
 
     ws.onmessage = function(event) {
@@ -15,6 +22,27 @@ var jack_socket = (function() {
         if(typeof event.data === 'object') {
             var json_data = JSON.parse(event.data);
             console.log("received a json data :" + json_data);
+            
+            switch (json_data.type) {
+                case 'callbackLogin': 
+                    loginSuccess(json_data);
+                    break;
+                case 'callbackAdd':
+                    addSuccess(json_data);
+                    break;
+                case 'callbackEnter':
+                    enterSuccess(json_data);
+                    break;
+                case 'callbackExit':
+                    exitSuccess(json_data);
+                    break;
+                case 'callbackDel':
+                    delSuccess(json);
+                    break;
+            }
+                
+            
+            
         } else if(typeof event.data === 'string') {
             console.log('received a string : ' + event.data);
         }
