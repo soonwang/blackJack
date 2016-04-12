@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>js 实现“21点” 扑克牌小游戏</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="public/stylesheets/normalize.min.css">
+  <link rel="stylesheet" href="public/stylesheets/style.min.css">
+</head>
+<body>
+  <div class="ws-container">
+    <div id="index" class="ws-hide">
+      <div class="ws-header">
+        <div class="ws-head">
+          <div class="ws-title ws-fl">
+            21点游戏PK间
+          </div>
+          <div id="online_number" class="ws-fr">
+            在线人数：100
+          </div>
+        </div>
+      </div>
+      <div id="ceillist" class="ws-wrapper ws-hide">
+        <div class="ws-house-list">
+          <ul>
+            <li>
+              <a href="#">
+                <span class="ws-imgbox">
+                  <img src="public/images/ceil.jpg" alt="">
+                </span>
+                <div class="ws-mes">
+                  <div class="ws-mes-title">
+                    <h3 class="ws-ellipsis">房间昵称</h3>
+                    <span class="ws-flag"> 人数已满</span>
+                  </div>
+                  <p>
+                    <span class="ws-blanker ws-ellipsis">
+                      庄家昵称
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span class="ws-imgbox">
+                  <img src="public/images/ceil.jpg" alt="">
+                </span>
+                <div class="ws-mes">
+                  <div class="ws-mes-title">
+                    <h3 class="ws-ellipsis">房间昵称</h3>
+                    <span class="ws-flag"> 人数已满</span>
+                  </div>
+                  <p>
+                    <span class="ws-blanker ws-ellipsis">
+                      庄家昵称
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span class="ws-imgbox">
+                  <img src="public/images/ceil.jpg" alt="">
+                </span>
+                <div class="ws-mes">
+                  <div class="ws-mes-title">
+                    <h3 class="ws-ellipsis">房间昵称</h3>
+                    <span class="ws-flag"> 人数已满</span>
+                  </div>
+                  <p>
+                    <span class="ws-blanker ws-ellipsis">
+                      庄家昵称
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span class="ws-imgbox">
+                  <img src="public/images/ceil.jpg" alt="">
+                </span>
+                <div class="ws-mes">
+                  <div class="ws-mes-title">
+                    <h3 class="ws-ellipsis">房间昵称</h3>
+                    <span class="ws-flag"> 人数已满</span>
+                  </div>
+                  <p>
+                    <span class="ws-blanker ws-ellipsis">
+                      庄家昵称
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span class="ws-imgbox">
+                  <img src="public/images/ceil.jpg" alt="">
+                </span>
+                <div class="ws-mes">
+                  <div class="ws-mes-title">
+                    <h3 class="ws-ellipsis">房间昵称</h3>
+                    <span class="ws-flag"> 人数已满</span>
+                  </div>
+                  <p>
+                    <span class="ws-blanker ws-ellipsis">
+                      庄家昵称
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span class="ws-imgbox">
+                  <img src="public/images/ceil.jpg" alt="">
+                </span>
+                <div class="ws-mes">
+                  <div class="ws-mes-title">
+                    <h3 class="ws-ellipsis">房间昵称</h3>
+                    <span class="ws-flag"> 人数已满</span>
+                  </div>
+                  <p>
+                    <span class="ws-blanker ws-ellipsis">
+                      庄家昵称
+                    </span>
+                  </p>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div id="login" class="ws-login ws-hide">
+        <div class="ws-login-box">
+          <div class="ws-box-head">
+            <p>登录</p>
+          </div>
+          <form action="">
+            <div class="ws-form">
+              <label for="nickname">给自己取个霸气的昵称吧^^</label>
+              <input type="text" name="nickname" id="nickname" placeholder="昵称">
+            </div>
+            <div class="ws-form">
+              <button type="submit" class="btn btn-warning btn-radius">确定</button>
+            </div>
+          </form>
+        </div>
+        <div class="ws-login-shadow"> 
+        </div>
+      </div>
+      <div id="addCeil" class="ws-login ">
+        <div class="ws-login-box">
+          <div class="ws-box-head">
+            <p>创建房间</p>
+          </div>
+          <form action="">
+            <div class="ws-form">
+              <label for="name">给房间取个独特的昵称吧^^</label>
+              <input type="text" name="name" id="name" placeholder="昵称">
+            </div>
+            <div class="ws-form">
+              <button type="submit" class="btn btn-warning btn-radius">确定</button>
+            </div>
+          </form>
+        </div>
+        <div class="ws-login-shadow"> 
+        </div>
+      </div>
+    </div>
+    <div id="ceil" class="ws-ceil">
+      <div id="table">
+          <img class="ws-table" src="public/images/Table.png" alt="">
+          <div id="hands" class="ws-hands">
+              <div id="blanker" class="ws-card ws-blanker">
+                
+                <span class="ws-score">10/20</span>
+                <img class="ws-card-test" src="public/images/heart03.jpg">
+                <img class="ws-card-test" src="public/images/heart03.jpg">
+                <img class="ws-card-test" src="public/images/heart03.jpg">
+              </div>
+              <div id="player" class="ws-card ws-player">
+                <span class="ws-score">0</span>
+                <img class="ws-card-test" src="public/images/heart04.jpg">
+                <img class="ws-card-test" src="public/images/heart04.jpg">
+                <img class="ws-card-test" src="public/images/heart04.jpg">
+              </div>
+          </div>
+          <div class="ws-chips">
+              <div class="ws-bet5 ws-chip ws-locked"></div>
+              <div class="ws-bet25 ws-chip ws-locked"></div>
+              <div class="ws-bet50 ws-chip ws-locked"></div>
+              <div class="ws-bet100 ws-chip ws-locked"></div>
+              <div class="ws-bet500 ws-chip ws-locked"></div>
+          </div>
+          <div class="ws-actions">
+              <a href="#" id="stand" class="ws-action ws-stand" title="我不要了"></a>
+              <a href="#" id="hit" class="ws-action ws-hit" title="再要一张"></a>
+              <div class="ws-action ws-split ws-locked"></div>
+              <div class="ws-action ws-double ws-locked"></div>
+              <div class="ws-action ws-surrender ws-locked"></div>
+          </div>
+          <div class="ws-options">
+              <a href="#" id="begin" class="ws-option ws-begin">开始</a>
+              <a href="#" id="exit" class="ws-option ws-exit">退出</a>
+          </div>
+          <div id="message" class="ws-message ws-hide">
+              玩家赢,庄家输
+          </div>
+    </div>
+  </div>
+</body>
+</html>
