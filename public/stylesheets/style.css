@@ -208,18 +208,18 @@ p {
 	left:10%;
 	top:0%;
 }
-.ws-card {
+.ws-cards {
 	min-width: 6.8%;
     height: 26.3%;
     margin-left: -3.4%;
-    border: #FFF 1px solid;
-    border-radius: 6px;
 }
-.ws-card ul,li{
-	margin: 0;
-	padding: 0;
+.ws-card {
 	float: left;
-	margin-left: -5%;
+	height: 100%;
+}
+.ws-border {
+	border: #FFF 1px solid;
+    border-radius: 6px;
 }
 .ws-player{
 	position: absolute;
@@ -232,9 +232,6 @@ p {
 	left:50%;
 	top:25px;
     background:url(../images/Dealer.png) no-repeat center;
-}
-.ws-card-test {
-	float: left;
 }
 .ws-score{
 	position: absolute;
