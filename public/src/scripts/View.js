@@ -116,12 +116,24 @@ var View = (function(Request) {
         Request.enterRequest(ceilId, blankerId);
     };
     var beginAction = function() {
-
+        //发两张牌，添加到myCards中
+        myCards.addCard(Cards.getNewCard());
+        myCards.addCard(Cards.getNewCard());
+        var cards = myCards.getAllCards();
+        //显示cards中的牌
+        cards.map(function(card) {
+            showDownCard(card);
+        });
+        //发送开始的请求，并将获取的card传过去
+        Request.beginRequest(cards);
     };
     var standAction = function() {
 
     };
     var hitAction = function() {
+
+    };
+    var showDownCard = function(card) {
 
     };
     init();
