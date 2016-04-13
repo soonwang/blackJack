@@ -235,6 +235,11 @@ p {
 }
 .ws-card-test {
 	float: left;
+    margin-left: -23%;
+}
+.ws-card .ws-card-test:first-child {
+	float: left;
+	margin-left: 0;
 }
 .ws-score{
 	position: absolute;
