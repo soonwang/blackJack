@@ -34,6 +34,14 @@ p {
 .ws-fr {
 	float: right;
 }
+.ws-top-right {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.ws-top-right button {
+	height: 50px;
+}
 *:not(i) {
   font-family: "微软雅黑";
 }
@@ -112,7 +120,7 @@ p {
 	right: 0;
 	top: 0;
 }
-.ws-house-list li .ws-blanker {
+.ws-house-list li .ws-blanker-nick {
 	background-position: -2px 4px;
     max-width: 180px;
 }

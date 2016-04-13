@@ -5,6 +5,7 @@ var uuid = require('node-uuid');
 var User = require('../bean/User');
 var UserList = require('../model/UserList');
 var Const = require('../utils/Const');
+var BackApi = require('../routes/BackApi');
 
 var UserService = (function() {
 
@@ -34,11 +35,8 @@ var UserService = (function() {
         var user = User(uuid.v1(), data.nickname, ws);
         
         UserList.addUser(user);
-        var data = {
-            type: 'callbackLogin',
-            userId: user.getId(),
-            nickname: user.getNickname()
-        };
+        
+        var data = BackApi.LoginBack(user.getUserId(), user.getNickname());
         ws.send(JSON.stringify(data));
     };
 

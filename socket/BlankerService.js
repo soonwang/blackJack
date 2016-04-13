@@ -17,7 +17,7 @@ var BlankerService = (function() {
     //     type: 'player',
     //     ceilId: ceilId,
     //     data: {
-    //         action: 'hit', //'stand', 'bust', 'again'
+    //         action: 'hit', //'stand', 'bust', 'begin'
     //         card: 'club01'
     //     }
     // };
@@ -47,7 +47,7 @@ var BlankerService = (function() {
         ws.send(JSON.stringify(message.data));
     };
     
-    var handleAgain = function (message) {
+    var handleBegin = function (message) {
         var ceil = CeilList.findCeil(message.CeilId);
         var blanker = ceil.getBlanker();
         var ws = blanker.getWs();
@@ -68,8 +68,8 @@ var BlankerService = (function() {
             case 'bust': 
                 handleBust(message);
                 break;
-            case 'again':
-                handleAgain(message);
+            case 'begin':
+                handleBegin(message);
                 break;
             default: 
                 handleDefault(message);

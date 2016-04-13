@@ -7,6 +7,7 @@ var Ceil = require('../bean/Ceil');
 var CeilList = require('../model/CeilList');
 var UserList = require('../model/UserList');
 var Const = require('../utils/Const');
+var BackApi = require('../routes/BackApi');
 
 var CeilService = (function() {
 
@@ -42,15 +43,7 @@ var CeilService = (function() {
         
         var ceil = Ceil(uuid.v4(), data.name, data.blankerId, null);
         CeilList.addCeil(ceil);
-        var blankerId = ceil.getBlanerId();
-        var backdata = {
-            type: 'callbackAdd',
-            data: {
-                ceilId: ceil.getId(),
-                name: ceil.getName(),
-                blankerId: blankerId
-            }
-        };
+        var backdata = BackApi.AddCeilBack(ceil.getCeilId(), ceil.getBlankerId(), ceil.getName());
         var user = UserList.findUser(blankerId);
         user.getWs().send(JSON.stringify(backdata));
 
@@ -64,6 +57,9 @@ var CeilService = (function() {
     //     }
     var delCeil = function(data) {
         CeilList.delCeil(data.ceilId);
+        var user = UserList.findUser(data.blankerId);
+        var backdata = BackApi.DelCeilBack();
+        user.getWs().send(JSON.stringify(backdata));
     };
 
     //进入房间
@@ -78,6 +74,9 @@ var CeilService = (function() {
 
         var newCeil = Ceil(data.ceilId, data.name, data.blankerId, data.playerId);
         CeilService.updateCeil(newCeil);
+        var backdata = BackApi.EnterCeilBack(data.ceilId, data.blankerId, data.playerId);
+        var player = UserList.findUser(data.playerId);
+        player.getWs().send(JSON.stringify(backdata));
 
     };
 
