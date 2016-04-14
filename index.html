@@ -10,7 +10,7 @@
 </head>
 <body>
   <div class="ws-container">
-    <div id="index" class="">
+    <div id="index" class="ws-hide">
       <div class="ws-header">
         <div class="ws-head">
           <div class="ws-title ws-fl">
@@ -189,17 +189,17 @@
         </div>
       </div>
     </div>
-    <div id="ceil" class="ws-hide">
+    <div id="ceil" class="ws-ceil">
       <div id="table">
           <img class="ws-table" src="public/images/Table.png" alt="">
           <div id="hands" class="ws-hands">
-              <div id="blanker" class="ws-cards ws-blanker">
+              <div id="up-cards" class="ws-cards ws-blanker">
                 <span class="ws-score">10/20</span>
                 <img class="ws-card" src="public/images/heart03.jpg">
                 <img class="ws-card" src="public/images/heart03.jpg">
                 <img class="ws-card" src="public/images/heart03.jpg">
               </div>
-              <div id="player" class="ws-cards ws-player">
+              <div id="down-cards" class="ws-cards ws-player">
                 <span class="ws-score">0</span>
                 <img class="ws-card" src="public/images/heart04.jpg">
                 <img class="ws-card" src="public/images/heart04.jpg">
@@ -216,8 +216,8 @@
               <div class="ws-bet500 ws-chip ws-locked"></div>
           </div>
           <div class="ws-actions">
-              <a href="javascript:void(0)" id="stand" class="ws-action ws-stand" title="我不要了"></a>
-              <a href="javascript:void(0)" id="hit" class="ws-action ws-hit" title="再要一张"></a>
+              <a href="javascript:void(0)" id="stand" class="ws-action ws-stand ws-locked" title="我不要了"></a>
+              <a href="javascript:void(0)" id="hit" class="ws-action ws-hit ws-locked" title="再要一张"></a>
               <div class="ws-action ws-split ws-locked"></div>
               <div class="ws-action ws-double ws-locked"></div>
               <div class="ws-action ws-surrender ws-locked"></div>

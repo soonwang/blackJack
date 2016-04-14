@@ -51,6 +51,12 @@ var Const = {
         STATUS: {
             SUCCESS: 'success',
             FAIL: 'fail'
+        },
+        ACTION: {
+            UPDATE_USER_NUM: 'updateUserNum',
+            UPDATE_CEIL: 'updateCeil',
+            ADD_CEIL: 'addCeil',
+            DEL_CEIL: 'delCeil'
         }
 
     }

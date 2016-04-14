@@ -18,11 +18,9 @@ var socketHandler = function(ws) {
         switch(jsonMessage.type) {
             case Const.TYPE.USER:
                 UserService.handle(jsonMessage, ws);
-                BroadcastService.updateUser();
                 break;
             case Const.TYPE.CEIL:
                 CeilService.handle(jsonMessage);
-                BroadcastService.updateCeil();
                 break;
             case Const.TYPE.PLAYER:
                 BlankerService.handle(jsonMessage);

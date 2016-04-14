@@ -6,6 +6,7 @@ var User = require('../bean/User');
 var UserList = require('../model/UserList');
 var Const = require('../utils/Const');
 var BackApi = require('../routes/BackApi');
+var BroadcastService = require('./BroadcastService');
 
 var UserService = (function() {
 
@@ -38,6 +39,8 @@ var UserService = (function() {
         
         var data = BackApi.LoginBack(user.getUserId(), user.getNickname());
         ws.send(JSON.stringify(data));
+        //广播
+        BroadcastService.updateUser(user.getUserId(), 'add');
     };
 
     /**
@@ -50,6 +53,8 @@ var UserService = (function() {
     //     },
     var delUser = function (data) {
         UserList.delUser(data.userId);
+        //广播
+        BroadcastService.updateUser(data.userId, 'delete');
     };
 
     /**

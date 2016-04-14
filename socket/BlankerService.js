@@ -5,7 +5,7 @@
 var Ceil = require('../bean/Ceil');
 var User = require('../bean/User');
 var CeilList = require('../model/CeilList');
-
+var BackApi = require('../routes/BackApi');
 var BlankerService = (function() {
 
     /**
@@ -30,28 +30,28 @@ var BlankerService = (function() {
         var ceil = CeilList.findCeil(message.CeilId);
         var blanker = ceil.getBlanker();
         var ws = blanker.getWs();
-        ws.send(JSON.stringify(message.data));
+        ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     
     var handleStand = function(message) {
         var ceil = CeilList.findCeil(message.CeilId);
         var blanker = ceil.getBlanker();
         var ws = blanker.getWs();
-        ws.send(JSON.stringify(message.data));
+        ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     
     var handleBust = function(message) {
         var ceil = CeilList.findCeil(message.CeilId);
         var blanker = ceil.getBlanker();
         var ws = blanker.getWs();
-        ws.send(JSON.stringify(message.data));
+        ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     
     var handleBegin = function (message) {
         var ceil = CeilList.findCeil(message.CeilId);
         var blanker = ceil.getBlanker();
         var ws = blanker.getWs();
-        ws.send(JSON.stringify(message.data));
+        ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     
     var handleDefault = function(message) {

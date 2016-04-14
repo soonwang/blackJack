@@ -8,6 +8,7 @@ var CeilList = require('../model/CeilList');
 var UserList = require('../model/UserList');
 var Const = require('../utils/Const');
 var BackApi = require('../routes/BackApi');
+var BroadcastService = require('./BroadcastService');
 
 var CeilService = (function() {
 
@@ -46,7 +47,8 @@ var CeilService = (function() {
         var backdata = BackApi.AddCeilBack(ceil.getCeilId(), ceil.getBlankerId(), ceil.getName());
         var user = UserList.findUser(blankerId);
         user.getWs().send(JSON.stringify(backdata));
-
+        //广播
+        BroadcastService.addCeil(ceil, user.getNickname());
     };
 
     //删除房间
@@ -60,6 +62,8 @@ var CeilService = (function() {
         var user = UserList.findUser(data.blankerId);
         var backdata = BackApi.DelCeilBack();
         user.getWs().send(JSON.stringify(backdata));
+        //广播
+        BroadcastService.delCeil(data.ceilId);
     };
 
     //进入房间
@@ -77,7 +81,8 @@ var CeilService = (function() {
         var backdata = BackApi.EnterCeilBack(data.ceilId, data.blankerId, data.playerId);
         var player = UserList.findUser(data.playerId);
         player.getWs().send(JSON.stringify(backdata));
-
+        //广播
+        BroadcastService.updateCeil(newCeil);
     };
 
     //退出房间
@@ -91,6 +96,7 @@ var CeilService = (function() {
     var exitCeil = function(data) {
         var newCeil = Ceil(data.ceilId, data.name, data.blankerId, null);
         CeilService.updateCeil(newCeil);
+        BroadcastService.updateCeil(newCeil);
     };
 
     var handleDefault = function () {

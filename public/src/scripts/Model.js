@@ -116,6 +116,27 @@ var myCards = (function() {
         getAllCards: getAllCards
     };
 })();
+/**
+ * 对方牌 的数据模型
+ * @type {{setNull, addCard, getAllCards}}
+ */
+var opCards = (function() {
+    var cards = [];
+    var setNull = function() {
+        cards = [];
+    };
+    var addCard = function(card) {
+        cards.push(card);
+    };
+    var getAllCards = function() {
+        return cards;
+    }
+    return {
+        setNull: setNull,
+        addCard: addCard,
+        getAllCards: getAllCards
+    };
+})();
 
 /**
  * 所有牌的数据模型
@@ -123,8 +144,8 @@ var myCards = (function() {
  */
 var Cards = (function(){
 
-    //所有的牌
-    var cards = [
+    //所有的牌,一直不动
+    var rowCards = [
         "club01", "club02", "club03", "club04", "club05", "club06", "club07",
         "club08", "club09", "club10", "club11", "club12", "club13", "diamond01",
         "diamond02", "diamond03", "diamond04", "diamond05", "diamond06", "diamond07",
@@ -133,10 +154,15 @@ var Cards = (function(){
         "heart08", "heart09", "heart10", "heart11", "heart12", "heart13",
         "spade01", "spade02", "spade03", "spade04", "spade05", "spade06", "spade07",
         "spade08", "spade09", "spade10", "spade11", "spade12", "spade13"];
+    var cards;
+    //每次重新开始都会将cards还原
+    var getNewCards = function() {
+        cards = rowCards.concat();
+    };
     //生成随机数
     var getRand = function (begin, end) {
         return Math.floor(Math.random() * (end - begin)) + begin;
-    }
+    };
 
     //洗牌
     var shuffle = function() {
@@ -157,7 +183,8 @@ var Cards = (function(){
     return {
         shuffle: shuffle,
         getNewCard: getNewCard,
-        delCard: delCard
+        delCard: delCard,
+        getNewCards:getNewCards
     };
 
 })();

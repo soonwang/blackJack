@@ -82,6 +82,56 @@ var BackApi = {
         };
         return json;
 
+    },
+    TransmitData: function(data) {
+        var json = {
+            type: Const.RETURN.TYPE.TRANSMIT,
+            data: data
+        };
+        return json;
+    },
+    UpdateUserNum: function(userNum, userId, type) {
+        var json = {
+            type: Const.RETURN.TYPE.BROADCAST,
+            data: {
+                action: Const.RETURN.ACTION.UPDATE_USER_NUM,
+                type: type,
+                userId: userId,
+                userNum: userNum
+            }
+        };
+        return json;
+    },
+    AddCeilBroad: function(ceil, blankerNickname) {
+        var json = {
+            type: Const.RETURN.TYPE.BROADCAST,
+            data: {
+                action: Const.RETURN.ACTION.ADD_CEIL,
+                ceil: ceil,
+                blankerNickname: blankerNickname
+            }
+        };
+        return json;
+    },
+    DelCeilBroad: function(ceilId) {
+        var json = {
+            type: Const.RETURN.TYPE.BROADCAST,
+            data: {
+                action: Const.RETURN.ACTION.DEL_CEIL,
+                ceilId: ceilId
+            }
+        };
+        return json;
+    },
+    UpdateCeilBroad: function(ceil) {
+        var json = {
+            type: Const.RETURN.TYPE.BROADCAST,
+            data: {
+                action: Const.RETURN.ACTION.UPDATE_CEIL,
+                ceil: ceil
+            }
+        };
+        return json;
     }
 }
 

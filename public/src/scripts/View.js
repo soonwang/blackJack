@@ -2,7 +2,8 @@
  * Created by wangsong3635 on 2016/4/13.
  */
 var View = (function(Request) {
-
+    //设置信息显示3秒
+    var messageShowTime = 3000;
 
     //准备html文档上所需操作的 Dom节点
     var onlineNumDiv = document.getElementById('online_number'),
@@ -23,10 +24,12 @@ var View = (function(Request) {
         beginBtn = document.getElementById('begin'),
         exitBtn = document.getElementById('exit'),
 
-        blankerCards = document.getElementById('blanker'),
-        playerCards = document.getElementById('blanker'),
+        upCards = document.getElementById('up-cards'),
+        downCards = document.getElementById('down-cards'),
         indexPage = document.getElementById('index'),
-        ceilPage = document.getElementById('ceil');
+        ceilPage = document.getElementById('ceil'),
+        messageDiv = document.getElementById('message');
+
     //屏蔽浏览器差异，添加、删除事件监听的工具类
     var EventUtil = {
 
@@ -49,7 +52,7 @@ var View = (function(Request) {
             }
         }
     };
-    //初始化，完成添加事件监听
+    //初始化，清空用户数据，完成添加事件监听
     var init = function() {
 
         EventUtil.addHandler(loginBtn, 'click', function(event) {
@@ -59,20 +62,35 @@ var View = (function(Request) {
         EventUtil.addHandler(addCeilSureBtn, 'click', function(event) {
             addCeilAction(event);
         });
-        EventUtil.addHandler(standBtn, 'click', standAction);
-        EventUtil.addHandler(hitBtn, 'click', hitAction);
-        EventUtil.addHandler(beginBtn, 'click', beginAction);
-        EventUtil.addHandler(exitBtn, 'click', Request.exitRequest);
         EventUtil.addHandler(ceillistDiv, 'click', function(event) {
            enterAction(event);
         });
+
+    };
+    var begin = function() {
+        //清空用户和对方的数据
+        myCards.setNull();
+        opCards.setNull();
+        Cards.getNewCards();
+        //清空桌面上的所有牌
+        clearCards();
+        //禁用stand、hit
+        // activeStandAndHit();
+        // lockStandAndHit();
+        //显示开始、退出按钮
+        showBeginAndExit();
+        EventUtil.addHandler(exitBtn, 'click', Request.exitRequest);
+        EventUtil.addHandler(beginBtn, 'click', beginAction);
+        if(User.getUserType() === 'blanker') {
+            hideBeginBtn();
+        }
     };
     var loginBoxPop = function() {
         loginBox.setAttribute('class', 'ws-login');
-    }
+    };
     var loginBoxOut = function() {
         loginBox.setAttribute('class', 'ws-hide');
-    }
+    };
     var ceilboxPop = function() {
         addCeilBox.setAttribute('class', 'ws-login');
     };
@@ -83,10 +101,60 @@ var View = (function(Request) {
         indexPage.setAttribute('class', 'ws-hide');
         ceilboxOut();
         ceilPage.setAttribute('class', 'ws-ceil');
+        begin();
     };
     var showIndex = function() {
-        indexPage.removeAttribute('class');
         ceilPage.setAttribute('class', 'ws-hide');
+        indexPage.removeAttribute('class');
+    };
+    var hideBeginBtn = function() {
+        beginBtn.setAttribute('class', 'ws-hide');
+        EventUtil.removeHandler(beginBtn, 'click', beginAction);
+    };
+    var showBeginBtn = function() {
+        beginBtn.setAttribute('class', 'ws-option ws-begin');
+        EventUtil.addHandler(beginBtn, 'click', beginAction);
+    };
+    var hideBeginAndExit = function() {
+        beginBtn.setAttribute('class', 'ws-hide');
+        exitBtn.setAttribute('class', 'ws-hide');
+    };
+    var showExitBtn = function() {
+        exitBtn.setAttribute('class', 'ws-option ws-exit');
+    };
+    var hideExitBtn = function() {
+        exitBtn.setAttribute('class', 'ws-hide');
+    };
+    var showBeginAndExit = function() {
+        beginBtn.setAttribute('class', 'ws-option ws-begin');
+        exitBtn.setAttribute('class', 'ws-option ws-exit');
+    };
+    //激活stand和hit按钮
+    var activeStandAndHit = function() {
+
+        EventUtil.addHandler(standBtn, 'click', standAction);
+        EventUtil.addHandler(hitBtn, 'click', hitAction);
+        standBtn.setAttribute('class', 'ws-action ws-stand');
+        hitBtn.setAttribute('class', 'ws-action ws-hit');
+    };
+    //将两个按钮禁用
+    var lockStandAndHit = function() {
+
+        EventUtil.removeHandler(standBtn, 'click', standAction);
+        EventUtil.removeHandler(hitBtn, 'click', hitAction);
+        standBtn.setAttribute('class', 'ws-action ws-stand ws-locked');
+        hitBtn.setAttribute('class', 'ws-action ws-hit ws-locked');
+    };
+    var showMessage = function(message) {
+        messageDiv.innerText = message;
+        messageDiv.setAttribute('class', 'ws-message');
+        //设置message显示5秒
+        setTimeout(hideMessage, messageShowTime);
+    };
+    //隐藏消息， 并将房间恢复到原来状态，用户数据模型还原
+    var hideMessage = function() {
+        begin();
+        messageDiv.setAttribute('class', 'ws-message');
     };
     var loginAction = function(event) {
         event.preventDefault();
@@ -106,7 +174,7 @@ var View = (function(Request) {
         } else {
             Request.addCeilRequest(ceilname);
         }
-    }
+    };
     var enterAction = function(event) {
         event.preventDefault();
         var target = event.target || event.srcElement;
@@ -115,33 +183,197 @@ var View = (function(Request) {
         var blankerId = rootNode.getAttribute('title');
         Request.enterRequest(ceilId, blankerId);
     };
+    //用户点击开始菜单 监听事件
     var beginAction = function() {
+
+        if(User.getUserType() === 'player') {
+            //隐藏开始和退出按钮
+            hideBeginAndExit();
+            //激活stand和hit按钮
+            activeStandAndHit();
+        } else {
+            //用户是庄家时，隐藏退出按钮
+            hideExitBtn();
+        }
         //发两张牌，添加到myCards中
         myCards.addCard(Cards.getNewCard());
-        myCards.addCard(Cards.getNewCard());
+        var secondCard = Cards.getNewCard();
+        myCards.addCard(secondCard);
         var cards = myCards.getAllCards();
         //显示cards中的牌
         cards.map(function(card) {
             showDownCard(card);
         });
-        //发送开始的请求，并将获取的card传过去
-        Request.beginRequest(cards);
+        //发送开始的请求，并将获取的第二张card传过去
+        Request.beginRequest(secondCard);
+        //判断是否爆掉
+        if(is_bust(cards)) {
+            //爆掉就发送爆掉请求
+            Request.bustRequest();
+            if(User.getUserType() === 'player') {
+                showMessage(Const.MESSAGE.PLAYER_BUST);
+            } else if(User.getUserType() === 'blanker') {
+                showMessage(Const.MESSAGE.BLANKER_BUST);
+            }
+        }
     };
-    var standAction = function() {
-
-    };
+    //用户点击hit 监听事件
     var hitAction = function() {
+        //再要一张牌，放入myCards中，并显示，在发送请求
+        var card = Cards.getNewCard();
+        myCards.addCard(card);
+        showDownCard(card);
+        Request.hitRequest(card);
+        //判断是否爆掉
+        if(is_bust(cards)) {
+            //爆掉就发送爆掉请求
+            Request.bustRequest();
+            if(User.getUserType() === 'player') {
+                showMessage(Const.MESSAGE.PLAYER_BUST);
+            } else if(User.getUserType() === 'blanker') {
+                showMessage(Const.MESSAGE.BLANKER_BUST);
+            }
+        }
+    };
+    //用户点击Stand 监听事件
+    var standAction = function() {
+        //将两个按钮禁用
+        lockStandAndHit();
+        //将myCards中第一张card传过去
+        Request.standRequest(myCards.getAllCards()[0]);
+        //如果用户类型为庄家，则开始比较大小
+        if(User.getUserType() === 'blanker') {
+            compareCards();
+        }
+    };
+
+    //显示玩家自己的分数
+    var showDownScore = function() {
+        var score = calculator(myCards.getAllCards());
+        downCards.firstElementChild.innerText = score;
+    };
+    //显示对方的已知分数
+    var showUpScore = function() {
+        var score = calculator(opCards.getAllCards());
+        upCards.firstElementChild.innerText = score;
+    }
+    //显示玩家自己的card
+    var showDownCard = function(card) {
+        var newImg = document.createElement('img');
+        newImg.setAttribute('class', 'ws-card');
+        newImg.setAttribute('src', 'public/images/' + card + '.jpg');
+        downCards.appendChild(newImg);
+        downCards.style.marginLeft = -downCards.offsetWidth/2 + 'px';
+        showDownScore();
+    };
+    //显示对方玩家的card
+    var showUpCard = function(card) {
+        var newImg = document.createElement('img');
+        newImg.setAttribute('class', 'ws-card');
+        newImg.setAttribute('src', 'public/images/' + card + '.jpg');
+        upCards.appendChild(newImg);
+        upCards.style.marginLeft = -upCards.offsetWidth/2 + 'px';
+        showUpScore();
+    };
+    //替换callback牌
+    var replaceCardBack = function(card) {
+        var newImg = document.createElement('img');
+        newImg.setAttribute('class', 'ws-card');
+        newImg.setAttribute('src', 'public/images/' + card + '.jpg');
+        upCards.replaceChild(newImg, upCards.children[1]);
+        showUpScore();
+    };
+    //清空桌面上的所有牌
+    var clearCards = function() {
+        //清除上方
+        for(var i=1, len = upCards.children.length; i<len; i++) {
+            upCards.removeChild(upCards.children[1]);
+        }
+        //清除下方
+        for(var i=1, len = downCards.children.length; i<len; i++) {
+            downCards.removeChild(upCards.children[1]);
+        }
+    };
+    //比较大小
+    var compareCards = function() {
+        var myScore = calculator(myCards.getAllCards());
+        var opScore = calculator(opCards.getAllCards());
+        if(User.getUserType === 'blanker') {
+            if(myScore > opScore) {
+                showMessage(Const.MESSAGE.BLANKER_WIN);
+            } else if(myScore < opScore) {
+                showMessage(Const.MESSAGE.PLAYER_WIN);
+            } else {
+                showMessage(Const.MESSAGE.PUSH);
+            }
+        } else {
+            if(myScore > opScore) {
+                showMessage(Const.MESSAGE.PLAYER_WIN);
+            } else if(myScore < opScore) {
+                showMessage(Const.MESSAGE.BLANKER_WIN);
+            } else {
+                showMessage(Const.MESSAGE.PUSH);
+            }
+        }
+    };
+    //判断cards是否爆掉，爆掉返回true
+    var is_bust = function(cards) {
+        var reuslt = calculator(cards);
+        var isBust = false;
+        if(result > 21) {
+            isBust = true;
+        }
+        return isBust;
+    };
+    //计算cards的值并返回结果
+    var calculator = function (cards) {
+        var result, numOfA;
+        for (var i = 0; i < cards.length; i++) {
+            var c = parseInt(cards[i].substr(cards[i].length - 2), "10");
+            if (c > 10) {
+                c = 10;
+            } else if (c == 1) {
+                numOfA++;
+            }
+            result += c;
+        }
+        for (var i = 0; i < numOfA; i++) {
+            if (result + 10 <= 21) {
+                result += 10;
+            } else {
+                break;
+            }
+        }
+
+        return result;
+    };
+    var indexUpdateUserNum = function() {
 
     };
-    var showDownCard = function(card) {
+    var indexAddCeil = function() {
+
+    };
+    var indexUpdateCeil = function() {
+
+    };
+    var indexDelCeil = function() {
 
     };
     init();
     return {
         loginBoxOut: loginBoxOut,
         showCeil: showCeil,
-        showIndex: showIndex
-        
+        showIndex: showIndex,
+        showUpCard: showUpCard,
+        beginAction: beginAction,
+        showMessage: showMessage,
+        replaceCardBack: replaceCardBack,
+        activeStandAndHit: activeStandAndHit,
+        compareCards: compareCards,
+        indexUpdateUserNum: indexUpdateUserNum,
+        indexAddCeil: indexAddCeil,
+        indexUpdateCeil: indexUpdateCeil,
+        indexDelCeil: indexDelCeil
     }
 
 })(new Request());

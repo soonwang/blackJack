@@ -17,16 +17,16 @@ var Request = function() {
         var data = Api.AddCeilData(userId, ceilname);
         jack_socket.sendMessage(data);
     };
-    this.beginRequest = function(cardsArr) {
+    this.beginRequest = function(secondCard) {
         var userType = User.getUserType();
         var ceilId = User.getCeilId();
-        var data = Api.BeginData(ceilId, userType, cardsArr);
+        var data = Api.BeginData(ceilId, userType, secondCard);
         jack_socket.sendMessage(data);
     };
-    this.standRequest = function() {
+    this.standRequest = function(firstCard) {
         var userType = User.getUserType();
         var ceilId = User.getCeilId();
-        var data = Api.StandData(ceilId, userType);
+        var data = Api.StandData(ceilId, userType, firstCard);
         jack_socket.sendMessage(data);
     };
     this.hitRequest = function(card) {

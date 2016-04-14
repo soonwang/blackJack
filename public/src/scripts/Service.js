@@ -83,3 +83,113 @@ var ReturnBackService = (function() {
         handle: handle
     }
 })();
+
+var TransmitService = (function() {
+    var handle = function(message) {
+        switch (message.data.action) {
+            case 'begin': 
+                beginHandler(message.data);
+                break;
+            case 'hit':
+                hitHandler(message.data);
+                break;
+            case 'stand':
+                standHandler(message.data);
+                break;
+            case 'bust':
+                bustHandler(message.data);
+                break;
+            default:
+                defaultHandler(message.data);
+                break;
+        }
+    };
+    var beginHandler = function(data) {
+        
+        //将对方的第二张牌放入opCards中,并显示
+        opCards.addCard(data.card);
+        View.showUpCard('callback');
+        View.showUpCard(data.card);
+        //如果用户类型是庄家，则生成两张牌，并存入myCards中
+        if(User.getUserType() === 'blanker') {
+            View.beginAction();
+        }
+    };
+    var hitHandler = function(data) {
+        //将对方牌放入opCards中，并显示
+        opCards.addCard(data.card);
+        View.showUpCard(data.card);
+
+    };
+    var standHandler = function(data) {
+        //将对方第一张牌放入opCards中，并替换掉cardback
+        opCards.addCard(data.card);
+        View.replaceCardBack(data.card);
+        if(User.getUserType() === 'blanker') {
+            //玩家停止要牌，庄家界面显示stand和hit按钮，庄家开始操作
+            View.activeStandAndHit();
+        } else if(User.getUserType() === 'planker') {
+            //庄家停止要牌，则开始比较牌大小
+        }
+    };
+    var bustHandler = function(data) {
+        if(User.getUserType() === 'blanker') {
+            View.showMessage(Const.MESSAGE.PLAYER_BUST);
+        } else {
+            View.showMessage(Const.MESSAGE.BLANKER_BUST);
+        }
+    };
+    var defaultHandler = function(data) {
+        console.log("TransmitService defaultHandler...");
+    };
+    return {
+        handle: handle
+    };
+
+})();
+var BroadcastService = (function() {
+
+    var handle = function(message) {
+        switch (message.data.action) {
+            case Const.RETURN.ACTION.UPDATE_USER_NUM:
+                updateUserNum(message.data);
+                break;
+            case Const.RETURN.ACTION.ADD_CEIL:
+                addCeil(message.data);
+                break;
+            case Const.RETURN.ACTION.DEL_CEIL:
+                delCeil(message.data);
+                break;
+            case Const.RETURN.ACTION.UPDATE_CEIL:
+                updateCeil(message.data);
+                break;
+            default:
+                console.log('client broadcast default...');
+                break;
+        }
+    };
+    var updateUserNum = function(data) {
+        View.indexUpdateUserNum(data.userNum);
+        if(User.getUserType() === 'blanker') {
+            if(data.userId === Ceil.getPlayerId()) {
+                View.showMessage(Const.MESSAGE.PLAYER_LOST);
+            }
+        } else if(User.getUserType === 'player') {
+            if(data.useId === Ceil.getBlankerId()) {
+                View.showMessage(Const.MESSAGE.BLANKER_LOST);
+            }
+        }
+    };
+    var addCeil = function(data) {
+
+    };
+    var delCeil = function(data) {
+
+    };
+    var updateCeil = function(data) {
+
+    };
+    return {
+        handle: handle
+    };
+})();

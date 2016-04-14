@@ -3,7 +3,7 @@
  */
 var Const = require('../utils/Const');
 var CeilList = require('../model/CeilList');
-
+var BackApi = require('../routes/BackApi');
 var PlayerService = (function() {
 
     // var blanker = {
@@ -20,7 +20,7 @@ var PlayerService = (function() {
         var ceil = CeilList.findCeil(message.ceilId);
         var player = ceil.getPlayer();
         var ws = player.getWs();
-        ws.send(JSON.stringify(message.data));
+        ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
 
 
@@ -29,21 +29,21 @@ var PlayerService = (function() {
         var ceil = CeilList.findCeil(message.ceilId);
         var player = ceil.getPlayer();
         var ws = player.getWs();
-        ws.send(JSON.stringify(message.data));
+        ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     //庄家bust， 玩家赢
     var handleBust = function(message) {
         var ceil = CeilList.findCeil(message.ceilId);
         var player = ceil.getPlayer();
         var ws = player.getWs();
-        ws.send(JSON.stringify(message.data));
+        ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     //庄家是否可以再玩呢
     var handleAgain = function (message) {
         var ceil = CeilList.findCeil(message.ceilId);
         var player = ceil.getPlayer();
         var ws = player.getWs();
-        ws.send(JSON.stringify(message.data));
+        ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
 
     var handleDefault = function(message) {
