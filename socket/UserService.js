@@ -61,6 +61,12 @@ var UserService = (function() {
         //广播
         BroadcastService.updateUser(data.userId, 'delete');
     };
+    var delUserByWs = function (ws) {
+        var userId = UserList.findUserByWs(ws);
+        UserList.delUser(userId);
+        //广播
+        BroadcastService.updateUser(userId, 'delete');
+    };
 
     /**
      * 处理default情况
@@ -72,7 +78,8 @@ var UserService = (function() {
 
     
     return {
-        handle: handle
+        handle: handle,
+        delUserByWs: delUserByWs
     };
 
 })();

@@ -28,7 +28,6 @@ var ReturnBackService = (function() {
         if(data.status === Const.RETURN.STATUS.SUCCESS) {
             //进入成功，将数据保存到本地
             User.setUserType('player'); //设置用户类型为玩家
-            console.log(data.ceilId);
             User.setCeilId(data.ceilId);
             Ceil.setCeilId(data.ceilId);
             Ceil.setName(data.name);
@@ -38,7 +37,7 @@ var ReturnBackService = (function() {
             View.showCeil();
         }
     };
-    var exitCeilHandler = function(message) {
+    var exitCeilHandler = function(data) {
         if(data.status === Const.RETURN.STATUS.SUCCESS) {
             //退出当前房间成功，将数据擦除
             User.setUserType(null); //将用户类型设置为null
@@ -52,7 +51,7 @@ var ReturnBackService = (function() {
         }
         
     };
-    var closeCeilHandler = function(message) {
+    var closeCeilHandler = function(data) {
         if(data.status === Const.RETURN.STATUS.SUCCESS) {
             //退出当前房间成功，将数据擦除
             User.setUserType(null); //将用户类型设置为null
@@ -78,10 +77,10 @@ var ReturnBackService = (function() {
                 enterCeilHandler(message.data);
                 break;
             case Const.RETURN.ACK.EXIT:
-                exitCeilHandler(message);
+                exitCeilHandler(message.data);
                 break;
-            case Const.RETURN.ACK.CLOSE:
-                closeCeilHandler(message);
+            case Const.RETURN.ACK.DELETE:
+                closeCeilHandler(message.data);
                 break;
         }
     };
@@ -112,10 +111,14 @@ var TransmitService = (function() {
     };
     var beginHandler = function(data) {
         
-        //将对方的第二张牌放入opCards中,并显示
-        opCards.addCard(data.card);
+        //将对方的第二张牌放入opCards中,在Cards中删除,并显示
+        opCards.setFirstCard(data.cards[0]);
+        opCards.addCard(data.cards[1]);
+        data.cards.map(function(card) {
+            Cards.delCard(card);
+        });
         View.showUpCard('cardback');
-        View.showUpCard(data.card);
+        View.showUpCard(data.cards[1]);
         //如果用户类型是庄家，则生成两张牌，并存入myCards中
         if(User.getUserType() === 'blanker') {
             View.beginAction();
@@ -134,15 +137,16 @@ var TransmitService = (function() {
         if(User.getUserType() === 'blanker') {
             //玩家停止要牌，庄家界面显示stand和hit按钮，庄家开始操作
             View.activeStandAndHit();
-        } else if(User.getUserType() === 'planker') {
+        } else if(User.getUserType() === 'player') {
             //庄家停止要牌，则开始比较牌大小
+            View.compareCards();
         }
     };
     var bustHandler = function(data) {
         if(User.getUserType() === 'blanker') {
-            View.showMessage(Const.MESSAGE.PLAYER_BUST, 1);
+            View.showMessage(Const.MESSAGE.PLAYER_BUST);
         } else {
-            View.showMessage(Const.MESSAGE.BLANKER_BUST, 1);
+            View.showMessage(Const.MESSAGE.BLANKER_BUST);
         }
     };
     var defaultHandler = function(data) {
@@ -201,10 +205,12 @@ var BroadcastService = (function() {
     var updateCeil = function(data) {
         View.indexUpdateCeil(data.ceil);
         if(data.ceil.ceilId === User.getCeilId()) {
-            if(data.ceil.playerId === null) {
-                View.showMessage(Const.MESSAGE.PLAYER_EXIT, 1);
-            } else if(data.ceil.playerId != null) {
-                View.showMessage(Const.MESSAGE.PLAYER_ENTER, 0);
+            if(User.getUserType() === 'blanker') {
+                if (data.ceil.playerId === null) {
+                    View.showMessage(Const.MESSAGE.PLAYER_EXIT, 1);
+                } else if (data.ceil.playerId != null) {
+                    View.showMessage(Const.MESSAGE.PLAYER_ENTER, 0);
+                }
             }
         }
     };

@@ -40,7 +40,7 @@ var PlayerService = (function() {
         ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     //庄家是否可以再玩呢
-    var handleAgain = function (message) {
+    var handleBegin = function (message) {
         var ceil = CeilList.findCeil(message.ceilId);
         var playerId = ceil.getPlayerId();
         var ws = UserList.findUser(playerId).getWs();
@@ -61,8 +61,8 @@ var PlayerService = (function() {
             case Const.ACTION.BUST:
                 handleBust(message);
                 break;
-            case Const.ACTION.AGAIN:
-                handleAgain(message);
+            case Const.ACTION.BEGIN:
+                handleBegin(message);
                 break;
             default:
                 handleDefault(message);

@@ -122,16 +122,26 @@ var myCards = (function() {
  */
 var opCards = (function() {
     var cards = [];
+    var firstCard = null;
+    var getFirstCard = function() {
+        return firstCard;
+    };
+    var setFirstCard = function(card) {
+        firstCard = card;
+    };
     var setNull = function() {
         cards = [];
+        firstCard = null;
     };
     var addCard = function(card) {
         cards.push(card);
     };
     var getAllCards = function() {
         return cards;
-    }
+    };
     return {
+        getFirstCard: getFirstCard,
+        setFirstCard: setFirstCard,
         setNull: setNull,
         addCard: addCard,
         getAllCards: getAllCards
@@ -158,6 +168,7 @@ var Cards = (function(){
     //每次重新开始都会将cards还原
     var getNewCards = function() {
         cards = rowCards.concat();
+        shuffle();
     };
     //生成随机数
     var getRand = function (begin, end) {

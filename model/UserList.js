@@ -34,9 +34,10 @@ var UserList = (function() {
         return newList[0];
     };
 
+
     var getAllUser = function() {
         return userList.concat();
-    }
+    };
 
     return {
         addUser: addUser,

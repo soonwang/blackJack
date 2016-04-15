@@ -14,6 +14,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var socketHandler = require('./socket/socketHandler');
+var BroadcastService = require('./socket/BroadcastService');
 
 var app = express();
 
@@ -64,6 +65,7 @@ app.use(function(err, req, res, next) {
 });
 wss.on('connection', function(ws) {
     socketHandler(ws);
+    BroadcastService.setWss(wss);
 });
 server.on('request', app);
 server.listen(port, function() {

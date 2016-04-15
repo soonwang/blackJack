@@ -75,6 +75,8 @@ var View = (function(Request) {
         Cards.getNewCards();
         //清空桌面上的所有牌
         clearCards();
+        //清空分数，恢复牌的位置
+        restoreCardAndScore();
         //禁用stand、hit
         // activeStandAndHit();
         // lockStandAndHit();
@@ -107,6 +109,15 @@ var View = (function(Request) {
     var showIndex = function() {
         ceilPage.setAttribute('class', 'ws-hide');
         indexPage.removeAttribute('class');
+    };
+    //清空分数，恢复牌的位置
+    var restoreCardAndScore = function() {
+        upCards.style.marginLeft = '0px';
+        upCards.children[0].innerText = '0';
+        upCards.setAttribute('class', 'ws-cards ws-blanker ws-border');
+        downCards.style.marginLeft = '0px';
+        downCards.children[0].innerText = '0';
+        downCards.setAttribute('class', 'ws-cards ws-player ws-border');
     };
     var hideBeginBtn = function() {
         beginBtn.setAttribute('class', 'ws-hide');
@@ -155,9 +166,10 @@ var View = (function(Request) {
         }, messageShowTime);
     };
     //隐藏消息， 并将房间恢复到原来状态，用户数据模型还原
-    var hideMessage = function() {
+    var hideMessage = function(next) {
 
         messageDiv.setAttribute('class', 'ws-hide');
+        console.log('next: '+ next);
         if(next) {
             showIndex();
         } else {
@@ -205,15 +217,18 @@ var View = (function(Request) {
         }
         //发两张牌，添加到myCards中
         myCards.addCard(Cards.getNewCard());
-        var secondCard = Cards.getNewCard();
-        myCards.addCard(secondCard);
+        myCards.addCard(Cards.getNewCard());
         var cards = myCards.getAllCards();
+        //将原有的border去掉
+        upCards.setAttribute('class', 'ws-cards ws-blanker');
+        downCards.setAttribute('class', 'ws-cards ws-player');
+
         //显示cards中的牌
         cards.map(function(card) {
             showDownCard(card);
         });
         //发送开始的请求，并将获取的第二张card传过去
-        Request.beginRequest(secondCard);
+        Request.beginRequest(cards);
         //判断是否爆掉
         if(is_bust(cards)) {
             //爆掉就发送爆掉请求
@@ -233,7 +248,7 @@ var View = (function(Request) {
         showDownCard(card);
         Request.hitRequest(card);
         //判断是否爆掉
-        if(is_bust(cards)) {
+        if(is_bust(myCards.getAllCards())) {
             //爆掉就发送爆掉请求
             Request.bustRequest();
             if(User.getUserType() === 'player') {
@@ -299,14 +314,14 @@ var View = (function(Request) {
         }
         //清除下方
         for(var i=1, len = downCards.children.length; i<len; i++) {
-            downCards.removeChild(upCards.children[1]);
+            downCards.removeChild(downCards.children[1]);
         }
     };
     //比较大小
     var compareCards = function() {
         var myScore = calculator(myCards.getAllCards());
         var opScore = calculator(opCards.getAllCards());
-        if(User.getUserType === 'blanker') {
+        if(User.getUserType() === 'blanker') {
             if(myScore > opScore) {
                 showMessage(Const.MESSAGE.BLANKER_WIN);
             } else if(myScore < opScore) {
@@ -314,7 +329,7 @@ var View = (function(Request) {
             } else {
                 showMessage(Const.MESSAGE.PUSH);
             }
-        } else {
+        } else if(User.getUserType() === 'player'){
             if(myScore > opScore) {
                 showMessage(Const.MESSAGE.PLAYER_WIN);
             } else if(myScore < opScore) {
@@ -335,7 +350,7 @@ var View = (function(Request) {
     };
     //计算cards的值并返回结果
     var calculator = function (cards) {
-        var result, numOfA;
+        var result = 0, numOfA = 0;
         for (var i = 0; i < cards.length; i++) {
             var c = parseInt(cards[i].substr(cards[i].length - 2), "10");
             if (c > 10) {

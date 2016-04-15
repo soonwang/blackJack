@@ -29,7 +29,8 @@ var socketHandler = function(ws) {
                 PlayerService.handle(jsonMessage);
                 break;
             default:
-                console.log('default...');
+                console.log('socketHandler default ...');
+
         }
 
     });

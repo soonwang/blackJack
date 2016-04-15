@@ -7,39 +7,46 @@ var BackApi = require('../routes/BackApi');
 
 var BroadcastService = (function(){
 
+    var Wss = null;
+    //设置wss
+    var setWss = function(wss) {
+        Wss = wss;
+    };
+
     var updateUser = function(userId, type) {
         var userList = UserList.getAllUser();
         var data = BackApi.UpdateUserNum(userList.length, userId, type);
-        userList.forEach(function(user) {
-           user.getWs().send(JSON.stringify(data));
+        Wss.clients.forEach(function(ws) {
+               ws.send(JSON.stringify(data));
         });
     };
     var addCeil = function(ceil) {
         var userList = UserList.getAllUser();
         var data = BackApi.AddCeilBroad(ceil);
-        userList.forEach(function(user) {
-            user.getWs().send(JSON.stringify(data));
+        Wss.clients.forEach(function(ws) {
+            ws.send(JSON.stringify(data));
         });
     };
     var delCeil = function(ceilId) {
         var userList = UserList.getAllUser();
         var data = BackApi.DelCeilBroad(ceilId);
-        userList.forEach(function(user) {
-            user.getWs().send(JSON.stringify(data));
+        Wss.clients.forEach(function(ws) {
+            ws.send(JSON.stringify(data));
         });
     };
     var updateCeil = function(ceil) {
         var userList = UserList.getAllUser();
         var data = BackApi.UpdateCeilBroad(ceil);
-        userList.forEach(function(user) {
-            user.getWs().send(JSON.stringify(data));
+        Wss.clients.forEach(function(ws) {
+            ws.send(JSON.stringify(data));
         });
     };
     return {
         updateUser: updateUser,
         updateCeil: updateCeil,
         addCeil: addCeil,
-        delCeil: delCeil
+        delCeil: delCeil,
+        setWss: setWss
     }
 })();
 

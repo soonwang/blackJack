@@ -24,7 +24,7 @@ var Const = {
         HIT: 'hit',
         STAND: 'stand',
         BUST: 'bust',
-        AGAIN: 'again'
+        BEGIN: 'begin'
 
     },
     RETURN: {

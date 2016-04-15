@@ -68,13 +68,13 @@ var Api = {
 		};
 		return json;
 	},
-    BeginData: function(ceilId, userType, secondCard) {
+    BeginData: function(ceilId, userType, cards) {
         var json = {
             type: userType,
             ceilId: ceilId,
             data: {
                 action: 'begin',
-                card: secondCard
+                cards: cards
             }
         };
         return json;
@@ -108,6 +108,7 @@ var Api = {
     		data: {
     			action: 'bust'
     		}
-    	}
+    	};
+		return json;
     }
 };

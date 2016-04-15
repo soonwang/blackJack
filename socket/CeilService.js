@@ -97,7 +97,11 @@ var CeilService = (function() {
 
     var exitCeil = function(data) {
         var newCeil = Ceil(data.ceilId, data.name, data.blankerId, null);
-        CeilService.updateCeil(newCeil);
+        CeilList.updateCeil(newCeil);
+        var backdata = BackApi.ExitCeilBack();
+        var player = UserList.findUser(data.playerId);
+        player.getWs().send(JSON.stringify(backdata));
+        //广播
         BroadcastService.updateCeil(newCeil);
     };
 

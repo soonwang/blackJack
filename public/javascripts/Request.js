@@ -17,11 +17,10 @@ var Request = function() {
         var data = Api.AddCeilData(userId, ceilname);
         jack_socket.sendMessage(data);
     };
-    this.beginRequest = function(secondCard) {
+    this.beginRequest = function(cards) {
         var userType = User.getUserType();
         var ceilId = User.getCeilId();
-        console.log(ceilId);
-        var data = Api.BeginData(ceilId, userType, secondCard);
+        var data = Api.BeginData(ceilId, userType, cards);
         jack_socket.sendMessage(data);
     };
     this.standRequest = function(firstCard) {
@@ -54,10 +53,10 @@ var Request = function() {
         var data;
         if(userType === 'player') {
             data = Api.ExitCeilData(ceilId, userId);
-        } else if(userType === 'blankerId') {
+        } else if(userType === 'blanker') {
             data = Api.DelCeilData(ceilId, userId);
         }
         jack_socket.sendMessage(data);
     };
 
-}
+};

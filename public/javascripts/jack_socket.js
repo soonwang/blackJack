@@ -37,7 +37,14 @@ var jack_socket = (function() {
     };
 
     ws.onclose = function() {
-
+        var data = {
+            type: 'user',
+            data: {
+                action: 'close',
+                userId: User.getUserId()
+            }
+        }
+        ws.send(JSON.stringify(data));
         console.log('closing...');
 
     };
