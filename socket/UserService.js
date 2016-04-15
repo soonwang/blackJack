@@ -37,10 +37,10 @@ var UserService = (function() {
         
         UserList.addUser(user);
         
-        var data = BackApi.LoginBack(user.getUserId(), user.getNickname());
+        var data = BackApi.LoginBack(user.getId(), user.getNickname());
         ws.send(JSON.stringify(data));
         //广播
-        BroadcastService.updateUser(user.getUserId(), 'add');
+        BroadcastService.updateUser(user.getId(), 'add');
     };
 
     /**

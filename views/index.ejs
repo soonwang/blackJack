@@ -3,34 +3,117 @@
 <head>
   <meta charset="UTF-8">
   <title>js 实现“21点” 扑克牌小游戏</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/stylesheets/normalize.min.css">
+  <link rel="stylesheet" href="/stylesheets/style.min.css">
 </head>
 <body>
-  <div class="ws-container">
+<div class="ws-container">
+  <div id="index" class="">
     <div class="ws-header">
-      <div class="ws-title">
-        21点游戏
+      <div class="ws-head">
+        <div class="ws-title ws-fl">
+          21点游戏PK间
+        </div>
+
+        <div id="online_number" class="ws-fr">
+          在线人数：0
+        </div>
+
       </div>
-      <div class="ws-fl">
-        登录
+      <div class="ws-top-right">
+        <button id="addCeilBtn" class="btn btn-warning btn-radius">创建房间</button>
       </div>
     </div>
-    <div class="ws-main">
-      <div class="ws-house-list">
-        <div class="ws-house">
-          <img src="/images/resource/ceil.jpg" alt="">
-        </div>
+    <div class="ws-wrapper">
+      <div id="ceillist" class="ws-house-list">
+        <ul>
+
+        </ul>
       </div>
-      <div class="ws-house-list">
-        <div class="ws-house">
-          <img src="/images/resource/ceil.jpg" alt="">
+    </div>
+    <div id="login" class="ws-login">
+      <div class="ws-login-box">
+        <div class="ws-box-head">
+          <p>登录</p>
         </div>
+        <form action="">
+          <div class="ws-form">
+            <label for="nickname">给自己取个霸气的昵称吧^^</label>
+            <input type="text" name="nickname" id="nickname" placeholder="昵称">
+          </div>
+          <div class="ws-form">
+            <button id="loginBtn" class="btn btn-warning btn-radius">确定</button>
+          </div>
+        </form>
       </div>
-      <div class="ws-house-list">
-        <div class="ws-house">
-          <img src="/images/resource/ceil.jpg" alt="">
+      <div class="ws-login-shadow">
+      </div>
+    </div>
+    <div id="addCeil" class="ws-login ws-hide">
+      <div class="ws-login-box">
+        <div class="ws-box-head">
+          <p>创建房间</p>
         </div>
+        <form action="">
+          <div class="ws-form">
+            <label for="ceilname">给房间取个独特的昵称吧^^</label>
+            <input type="text" name="ceilname" id="ceilname" placeholder="昵称">
+          </div>
+          <div class="ws-form">
+            <button id="addCeilSureBtn" class="btn btn-warning btn-radius">确定</button>
+          </div>
+        </form>
+      </div>
+      <div class="ws-login-shadow">
       </div>
     </div>
   </div>
+  <div id="ceil" class="ws-ceil ws-hide">
+    <div id="table">
+      <img class="ws-table" src="/images/Table.png" alt="">
+      <div id="hands" class="ws-hands">
+        <div id="up-cards" class="ws-cards ws-blanker">
+          <span class="ws-score">10/20</span>
+
+        </div>
+        <div id="down-cards" class="ws-cards ws-player">
+          <span class="ws-score">0</span>
+
+        </div>
+      </div>
+      <div class="ws-chips">
+        <div class="ws-bet5 ws-chip ws-locked"></div>
+        <div class="ws-bet25 ws-chip ws-locked"></div>
+        <div class="ws-bet50 ws-chip ws-locked"></div>
+        <div class="ws-bet100 ws-chip ws-locked"></div>
+        <div class="ws-bet500 ws-chip ws-locked"></div>
+      </div>
+      <div class="ws-actions">
+        <a href="javascript:void(0)" id="stand" class="ws-action ws-stand ws-locked" title="我不要了"></a>
+        <a href="javascript:void(0)" id="hit" class="ws-action ws-hit ws-locked" title="再要一张"></a>
+        <div class="ws-action ws-split ws-locked"></div>
+        <div class="ws-action ws-double ws-locked"></div>
+        <div class="ws-action ws-surrender ws-locked"></div>
+      </div>
+      <div class="ws-options">
+        <a href="javascript:void(0)" id="begin" class="ws-option ws-begin">开始</a>
+        <a href="javascript:void(0)" id="exit" class="ws-option ws-exit">退出</a>
+      </div>
+      <div id="message" class="ws-message ws-hide">
+        玩家赢,庄家输
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/javascripts/Const.js"></script>
+<script src="/javascripts/Model.js"></script>
+<script src="/javascripts/Api.js"></script>
+<script src="/javascripts/Request.js"></script>
+<script src="/javascripts/View.js"></script>
+<script src="/javascripts/Service.js"></script>
+<script src="/javascripts/jack_socket.js"></script>
+<!--<script src="/javascripts/index.js"></script>-->
 </body>
 </html>

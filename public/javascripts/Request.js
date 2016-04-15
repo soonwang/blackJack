@@ -54,7 +54,7 @@ var Request = function() {
         if(userType === 'player') {
             data = Api.ExitCeilData(ceilId, userId);
         } else if(userType === 'blankerId') {
-            data = Api.DelCeilData(ceilId, userId);
+            data.Api.DelCeilData(ceilId, userId);
         }
         jack_socket.sendMessage(data);
     };

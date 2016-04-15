@@ -5,47 +5,28 @@ var jack_socket = (function() {
     var ws = new WebSocket('ws://127.0.0.1:4080');
 
     ws.onopen = function() {
-        console.log('opened...');
-        var user = {
-            type: 'user',
-            data: {
-                action: 'login',
-                nickname: 'wangsong'
-            }
-        };
-        ws.send(JSON.stringify(user));
+        console.log("连接到服务器");
     };
 
     ws.onmessage = function(event) {
 
-
-        if(typeof event.data === 'object') {
             var json_data = JSON.parse(event.data);
             console.log("received a json data :" + json_data);
             
             switch (json_data.type) {
-                case 'callbackLogin': 
-                    loginSuccess(json_data);
+                case Const.RETURN.TYPE.BACK:
+                    ReturnBackService.handle(json_data);
                     break;
-                case 'callbackAdd':
-                    addSuccess(json_data);
+                case Const.RETURN.TYPE.BROADCAST:
+                    BroadcastService.handle(json_data);
                     break;
-                case 'callbackEnter':
-                    enterSuccess(json_data);
+                case Const.RETURN.TYPE.TRANSMIT:
+                    TransmitService.handle(json_data);
                     break;
-                case 'callbackExit':
-                    exitSuccess(json_data);
-                    break;
-                case 'callbackDel':
-                    delSuccess(json);
+                default:
+                    console.log(event.data);
                     break;
             }
-                
-            
-            
-        } else if(typeof event.data === 'string') {
-            console.log('received a string : ' + event.data);
-        }
 
     };
 
@@ -60,5 +41,20 @@ var jack_socket = (function() {
         console.log('closing...');
 
     };
+
+    /**
+     * 发送json数据到服务器
+     * @param obj
+     * @param errorHandler
+     */
+    var sendMessage = function(obj, errorHandler) {
+        ws.send(JSON.stringify(obj), function(err) {
+            console.log(err);
+            errorHandler();
+        });
+    };
+    return {
+        sendMessage: sendMessage
+    }
 
 })();

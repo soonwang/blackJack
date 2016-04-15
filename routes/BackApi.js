@@ -133,85 +133,85 @@ var BackApi = {
         };
         return json;
     }
-}
-
-
-var user = {
-    type: 'user',
-    data: {
-        action: 'close',
-        userId: 'useId'
-    },
-    data: {
-        action: 'login',
-        nickname: 'nickname'
-    }
 };
-
-//returnback
-
-var user = {
-    type: 'back',
-    data: {
-        ack: 'login',
-        status: 'success',
-        userId: 'userId',
-        nickname: 'nickname'
-    }
-}
-
-
-var ceil = {
-    type: 'ceil',
-    data: {
-        action: 'add',
-        blankerId: 'userId',
-        name: 'name'
-    },
-    data: {
-        action: 'enter',
-        ceilId: 'ceilId',
-        playerId: 'userId',
-        blankerId: 'blankerId'
-    },
-
-    data: {
-        action: 'exit',
-        ceilId: 'ceilId',
-        playerId: 'userId'
-    },
-    data: {
-        action: 'delete',
-        ceilId: 'ceilId',
-        blankerId: 'userId'
-    }
-};
-
-/**
- * 玩家发送的信息，由BlankerService处理
- * @type {{type: string, ceilId: *, data: {action: string, card: string}}}
- */
-
-var player = {
-    type: 'player',
-    ceilId: ceilId,
-    data: {
-        action: 'hit', //'stand', 'bust', 'begin'
-        card: 'club01'
-    }
-};
-
-/**
- * 庄家发送的消息，由PlayerService处理
- * @type {{type: string, ceilId: *, data: {action: string, card: string}}}
- */
-var blanker = {
-    type: 'blanker',
-    ceilId: ceilId,
-    data: {
-        action: 'hit', //'stand', 'bust'
-        card: 'club02'
-    }
-}
-
 module.exports = BackApi;
+
+
+// var user = {
+//     type: 'user',
+//     data: {
+//         action: 'close',
+//         userId: 'useId'
+//     },
+//     data: {
+//         action: 'login',
+//         nickname: 'nickname'
+//     }
+// };
+//
+// //returnback
+//
+// var user = {
+//     type: 'back',
+//     data: {
+//         ack: 'login',
+//         status: 'success',
+//         userId: 'userId',
+//         nickname: 'nickname'
+//     }
+// }
+//
+//
+// var ceil = {
+//     type: 'ceil',
+//     data: {
+//         action: 'add',
+//         blankerId: 'userId',
+//         name: 'name'
+//     },
+//     data: {
+//         action: 'enter',
+//         ceilId: 'ceilId',
+//         playerId: 'userId',
+//         blankerId: 'blankerId'
+//     },
+//
+//     data: {
+//         action: 'exit',
+//         ceilId: 'ceilId',
+//         playerId: 'userId'
+//     },
+//     data: {
+//         action: 'delete',
+//         ceilId: 'ceilId',
+//         blankerId: 'userId'
+//     }
+// };
+//
+// /**
+//  * 玩家发送的信息，由BlankerService处理
+//  * @type {{type: string, ceilId: *, data: {action: string, card: string}}}
+//  */
+//
+// var player = {
+//     type: 'player',
+//     ceilId: ceilId,
+//     data: {
+//         action: 'hit', //'stand', 'bust', 'begin'
+//         card: 'club01'
+//     }
+// };
+//
+// /**
+//  * 庄家发送的消息，由PlayerService处理
+//  * @type {{type: string, ceilId: *, data: {action: string, card: string}}}
+//  */
+// var blanker = {
+//     type: 'blanker',
+//     ceilId: ceilId,
+//     data: {
+//         action: 'hit', //'stand', 'bust'
+//         card: 'club02'
+//     }
+// }
+

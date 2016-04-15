@@ -44,8 +44,8 @@ var CeilService = (function() {
         
         var ceil = Ceil(uuid.v4(), data.name, data.blankerId, null);
         CeilList.addCeil(ceil);
-        var backdata = BackApi.AddCeilBack(ceil.getCeilId(), ceil.getBlankerId(), ceil.getName());
-        var user = UserList.findUser(blankerId);
+        var backdata = BackApi.AddCeilBack(ceil.getId(), ceil.getBlankerId(), ceil.getName());
+        var user = UserList.findUser(data.blankerId);
         user.getWs().send(JSON.stringify(backdata));
         //广播
         BroadcastService.addCeil(ceil, user.getNickname());
