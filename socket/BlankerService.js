@@ -4,6 +4,7 @@
 
 var Ceil = require('../bean/Ceil');
 var User = require('../bean/User');
+var UserList = require('../model/UserList');
 var CeilList = require('../model/CeilList');
 var BackApi = require('../routes/BackApi');
 var BlankerService = (function() {
@@ -27,30 +28,32 @@ var BlankerService = (function() {
      * @param message
      */
     var handleHit = function(message) {
-        var ceil = CeilList.findCeil(message.CeilId);
-        var blanker = ceil.getBlanker();
-        var ws = blanker.getWs();
+        var ceil = CeilList.findCeil(message.ceilId);
+        var blankerId = ceil.getBlankerId();
+        var ws = UserList.findUser(blankerId).getWs();
         ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     
     var handleStand = function(message) {
-        var ceil = CeilList.findCeil(message.CeilId);
-        var blanker = ceil.getBlanker();
-        var ws = blanker.getWs();
+        var ceil = CeilList.findCeil(message.ceilId);
+        var blankerId = ceil.getBlankerId();
+        var ws = UserList.findUser(blankerId).getWs();
         ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     
     var handleBust = function(message) {
-        var ceil = CeilList.findCeil(message.CeilId);
-        var blanker = ceil.getBlanker();
-        var ws = blanker.getWs();
+        var ceil = CeilList.findCeil(message.ceilId);
+        var blankerId = ceil.getBlankerId();
+        var ws = UserList.findUser(blankerId).getWs();
         ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     
     var handleBegin = function (message) {
-        var ceil = CeilList.findCeil(message.CeilId);
-        var blanker = ceil.getBlanker();
-        var ws = blanker.getWs();
+        var ceil = CeilList.findCeil(message.ceilId);
+        console.log('BlankerService handleBegin: ceil');
+        console.log(ceil);
+        var blankerId = ceil.getBlankerId();
+        var ws = UserList.findUser(blankerId).getWs();
         ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     

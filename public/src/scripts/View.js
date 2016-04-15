@@ -146,16 +146,23 @@ var View = (function(Request) {
         standBtn.setAttribute('class', 'ws-action ws-stand ws-locked');
         hitBtn.setAttribute('class', 'ws-action ws-hit ws-locked');
     };
-    var showMessage = function(message) {
+    var showMessage = function(message, next) {
         messageDiv.innerText = message;
         messageDiv.setAttribute('class', 'ws-message');
         //设置message显示5秒
-        setTimeout(hideMessage, messageShowTime);
+        setTimeout(function() {
+            hideMessage(next);
+        }, messageShowTime);
     };
     //隐藏消息， 并将房间恢复到原来状态，用户数据模型还原
     var hideMessage = function() {
-        begin();
-        messageDiv.setAttribute('class', 'ws-message');
+
+        messageDiv.setAttribute('class', 'ws-hide');
+        if(next) {
+            showIndex();
+        } else {
+            begin();
+        }
     };
     var loginAction = function(event) {
         event.preventDefault();
@@ -276,7 +283,7 @@ var View = (function(Request) {
         upCards.style.marginLeft = -upCards.offsetWidth/2 + 'px';
         showUpScore();
     };
-    //替换callback牌
+    //替换cardback牌
     var replaceCardBack = function(card) {
         var newImg = document.createElement('img');
         newImg.setAttribute('class', 'ws-card');
@@ -319,7 +326,7 @@ var View = (function(Request) {
     };
     //判断cards是否爆掉，爆掉返回true
     var is_bust = function(cards) {
-        var reuslt = calculator(cards);
+        var result = calculator(cards);
         var isBust = false;
         if(result > 21) {
             isBust = true;
@@ -351,10 +358,21 @@ var View = (function(Request) {
     var indexUpdateUserNum = function(userNum) {
         onlineNumDiv.innerText = '在线人数： ' + userNum;
     };
-    var indexAddCeil = function(ceil, blankerNickname) {
+    var showCeilList = function(showCeilList) {
+        showCeilList.map(function(ceil) {
+           indexAddCeil(ceil); 
+        });  
+    };
+    var indexAddCeil = function(ceil) {
         var newLi = document.createElement('li');
-
-        newLi.innerHTML ='<a href="'+ceil.ceilId+'" title="'+ceil.blankerId+'">' +
+        var isCeilFilled = (function() {
+            if(ceil.playerId === null) {
+                return '人数未满';
+            }  else {
+                return '人数已满';
+            }
+        })();
+        newLi.innerHTML ='<a href="'+ceil.id+'" title="'+ceil.blankerId+'">' +
                          '<div> ' +
                             '<span class="ws-imgbox">' +
                             '<img src="/images/ceil.jpg" alt="">' +
@@ -362,11 +380,11 @@ var View = (function(Request) {
                          '</div>' +
                          '<div class="ws-mes">' +
                              '<div class="ws-mes-title">' +
-                                 '<h3 class="ws-ellipsis">'+ ceil.ceilname +'</h3>' +
-                                 '<span class="ws-flag"> 人数未满</span>' +
+                                 '<h3 class="ws-ellipsis">'+ ceil.name +'</h3>' +
+                                 '<span class="ws-flag"> '+ isCeilFilled +'</span>' +
                              '</div>' +
                              '<p>' +
-                                 '<span class="ws-blanker-nick ws-ellipsis">' + blankerNickname +'</span>'+
+                                 '<span class="ws-blanker-nick ws-ellipsis">' + ceil.blankerNickname +'</span>'+
                              '</p>'+
                          '</div>' +
                         '</a>';
@@ -375,7 +393,7 @@ var View = (function(Request) {
     var indexUpdateCeil = function(ceil) {
         var lists = ceillistDiv.children[0].children;
         for(var i=0, len=lists.length; i<len; i++) {
-            if(lists[i].children[0].getAttribute('href') === ceilId) {
+            if(lists[i].children[0].getAttribute('href') === ceil.ceilId) {
                 lists[i].children[0].setAttribute('href', ceil.ceilId);
                 lists[i].children[0].setAttribute('title', ceil.blankerId);
                 if(ceil.playerId != null) {
@@ -395,6 +413,7 @@ var View = (function(Request) {
     init();
     return {
         loginBoxOut: loginBoxOut,
+        showCeilList: showCeilList,
         showCeil: showCeil,
         showIndex: showIndex,
         showUpCard: showUpCard,

@@ -5,17 +5,18 @@
 var Const = require('../utils/Const');
 /**
  * api: 客户端发送到服务器的代码api
- * @type {{type: string, nickname: string}}
+ * @type {{type: string, nickname: string, ceilList<包括blankerNickname>}}
  */
 var BackApi = {
-    LoginBack: function(userId, nickname) {
+    LoginBack: function(userId, nickname, ceilList) {
         var json = {
             type: Const.RETURN.TYPE.BACK,
             data: {
                 ack: Const.RETURN.ACK.LOGIN,
                 status: Const.RETURN.STATUS.SUCCESS,
                 userId: userId,
-                nickname: nickname
+                nickname: nickname,
+                ceilList: ceilList
             }
         };
         return json;
@@ -44,7 +45,7 @@ var BackApi = {
         return json;
 
     },
-    EnterCeilBack: function(ceilId, blankerId, playerId) {
+    EnterCeilBack: function(ceilId, blankerId, playerId, name) {
 
         var json = {
             type: Const.RETURN.TYPE.BACK,
@@ -102,13 +103,12 @@ var BackApi = {
         };
         return json;
     },
-    AddCeilBroad: function(ceil, blankerNickname) {
+    AddCeilBroad: function(ceil) {
         var json = {
             type: Const.RETURN.TYPE.BROADCAST,
             data: {
                 action: Const.RETURN.ACTION.ADD_CEIL,
                 ceil: ceil,
-                blankerNickname: blankerNickname
             }
         };
         return json;

@@ -20,6 +20,7 @@ var Request = function() {
     this.beginRequest = function(secondCard) {
         var userType = User.getUserType();
         var ceilId = User.getCeilId();
+        console.log(ceilId);
         var data = Api.BeginData(ceilId, userType, secondCard);
         jack_socket.sendMessage(data);
     };
@@ -54,7 +55,7 @@ var Request = function() {
         if(userType === 'player') {
             data = Api.ExitCeilData(ceilId, userId);
         } else if(userType === 'blankerId') {
-            data.Api.DelCeilData(ceilId, userId);
+            data = Api.DelCeilData(ceilId, userId);
         }
         jack_socket.sendMessage(data);
     };

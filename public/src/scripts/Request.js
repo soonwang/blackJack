@@ -20,6 +20,7 @@ var Request = function() {
     this.beginRequest = function(secondCard) {
         var userType = User.getUserType();
         var ceilId = User.getCeilId();
+        console.log(ceilId);
         var data = Api.BeginData(ceilId, userType, secondCard);
         jack_socket.sendMessage(data);
     };

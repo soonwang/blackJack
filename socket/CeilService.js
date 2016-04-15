@@ -48,7 +48,9 @@ var CeilService = (function() {
         var user = UserList.findUser(data.blankerId);
         user.getWs().send(JSON.stringify(backdata));
         //广播
-        BroadcastService.addCeil(ceil, user.getNickname());
+        //将每个房间的庄家昵称放入ceil中
+        ceil.blankerNickname = user.getNickname()
+        BroadcastService.addCeil(ceil);
     };
 
     //删除房间
@@ -77,8 +79,8 @@ var CeilService = (function() {
     var enterCeil = function(data) {
 
         var newCeil = Ceil(data.ceilId, data.name, data.blankerId, data.playerId);
-        CeilService.updateCeil(newCeil);
-        var backdata = BackApi.EnterCeilBack(data.ceilId, data.blankerId, data.playerId);
+        CeilList.updateCeil(newCeil);
+        var backdata = BackApi.EnterCeilBack(data.ceilId, data.blankerId, data.playerId, data.name);
         var player = UserList.findUser(data.playerId);
         player.getWs().send(JSON.stringify(backdata));
         //广播

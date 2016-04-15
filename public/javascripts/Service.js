@@ -9,12 +9,14 @@ var ReturnBackService = (function() {
             User.setNickname(data.nickname);
             //显示主页面
             View.loginBoxOut();
+            View.showCeilList(data.ceilList);
         }
     };
     var addCeilHandler = function(data) {
         if(data.status === Const.RETURN.STATUS.SUCCESS) {
             //创建成功，将数据保存到本地
             User.setUserType('blanker');//设置用户类型为庄家
+            User.setCeilId(data.ceilId);
             Ceil.setBlankerId(data.blankerId);
             Ceil.setCeilId(data.ceilId);
             Ceil.setName(data.name);
@@ -26,6 +28,8 @@ var ReturnBackService = (function() {
         if(data.status === Const.RETURN.STATUS.SUCCESS) {
             //进入成功，将数据保存到本地
             User.setUserType('player'); //设置用户类型为玩家
+            console.log(data.ceilId);
+            User.setCeilId(data.ceilId);
             Ceil.setCeilId(data.ceilId);
             Ceil.setName(data.name);
             Ceil.setBlankerId(data.blankerId);
@@ -38,6 +42,7 @@ var ReturnBackService = (function() {
         if(data.status === Const.RETURN.STATUS.SUCCESS) {
             //退出当前房间成功，将数据擦除
             User.setUserType(null); //将用户类型设置为null
+            User.setCeilId(null);
             Ceil.setCeilId(null);
             Ceil.setBlankerId(null);
             Ceil.setName(null);
@@ -51,6 +56,7 @@ var ReturnBackService = (function() {
         if(data.status === Const.RETURN.STATUS.SUCCESS) {
             //退出当前房间成功，将数据擦除
             User.setUserType(null); //将用户类型设置为null
+            User.setCeilId(null);
             Ceil.setCeilId(null);
             Ceil.setBlankerId(null);
             Ceil.setName(null);
@@ -108,7 +114,7 @@ var TransmitService = (function() {
         
         //将对方的第二张牌放入opCards中,并显示
         opCards.addCard(data.card);
-        View.showUpCard('callback');
+        View.showUpCard('cardback');
         View.showUpCard(data.card);
         //如果用户类型是庄家，则生成两张牌，并存入myCards中
         if(User.getUserType() === 'blanker') {
@@ -134,9 +140,9 @@ var TransmitService = (function() {
     };
     var bustHandler = function(data) {
         if(User.getUserType() === 'blanker') {
-            View.showMessage(Const.MESSAGE.PLAYER_BUST);
+            View.showMessage(Const.MESSAGE.PLAYER_BUST, 1);
         } else {
-            View.showMessage(Const.MESSAGE.BLANKER_BUST);
+            View.showMessage(Const.MESSAGE.BLANKER_BUST, 1);
         }
     };
     var defaultHandler = function(data) {
@@ -174,11 +180,11 @@ var BroadcastService = (function() {
         if(data.type === 'delete') {
             if(User.getUserType() === 'blanker') {
                 if(data.userId === Ceil.getPlayerId()) {
-                    View.showMessage(Const.MESSAGE.PLAYER_LOST);
+                    View.showMessage(Const.MESSAGE.PLAYER_LOST, 1);
                 }
             } else if(User.getUserType() === 'player') {
                 if(data.useId === Ceil.getBlankerId()) {
-                    View.showMessage(Const.MESSAGE.BLANKER_LOST);
+                    View.showMessage(Const.MESSAGE.BLANKER_LOST, 1);
                 }
             }
         }
@@ -189,16 +195,16 @@ var BroadcastService = (function() {
     var delCeil = function(data) {
         View.indexDelCeil(data.ceilId);
         if(User.getUserType() === 'player' && Ceil.getCeilId() === data.ceilId) {
-            View.showMessage(Const.MESSAGE.BLANKER_EXIT);
+            View.showMessage(Const.MESSAGE.BLANKER_EXIT, 1);
         }
     };
     var updateCeil = function(data) {
         View.indexUpdateCeil(data.ceil);
         if(data.ceil.ceilId === User.getCeilId()) {
             if(data.ceil.playerId === null) {
-                View.showMessage(Const.MESSAGE.PLAYER_EXIT);
+                View.showMessage(Const.MESSAGE.PLAYER_EXIT, 1);
             } else if(data.ceil.playerId != null) {
-                View.showMessage(Const.MESSAGE.PLAYER_ENTER);
+                View.showMessage(Const.MESSAGE.PLAYER_ENTER, 0);
             }
         }
     };

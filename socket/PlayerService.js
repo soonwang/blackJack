@@ -2,6 +2,7 @@
  * Created by wangsong3635 on 2016/4/11.
  */
 var Const = require('../utils/Const');
+var UserList = require('../model/UserList');
 var CeilList = require('../model/CeilList');
 var BackApi = require('../routes/BackApi');
 var PlayerService = (function() {
@@ -18,8 +19,8 @@ var PlayerService = (function() {
     //庄家继续要牌
     var handleHit = function(message) {
         var ceil = CeilList.findCeil(message.ceilId);
-        var player = ceil.getPlayer();
-        var ws = player.getWs();
+        var playerId = ceil.getPlayerId();
+        var ws = UserList.findUser(playerId).getWs();
         ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
 
@@ -27,22 +28,22 @@ var PlayerService = (function() {
     //庄家stand时， 比较庄家和玩家的大小
     var handleStand = function(message) {
         var ceil = CeilList.findCeil(message.ceilId);
-        var player = ceil.getPlayer();
-        var ws = player.getWs();
+        var playerId = ceil.getPlayerId();
+        var ws = UserList.findUser(playerId).getWs();
         ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     //庄家bust， 玩家赢
     var handleBust = function(message) {
         var ceil = CeilList.findCeil(message.ceilId);
-        var player = ceil.getPlayer();
-        var ws = player.getWs();
+        var playerId = ceil.getPlayerId();
+        var ws = UserList.findUser(playerId).getWs();
         ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
     //庄家是否可以再玩呢
     var handleAgain = function (message) {
         var ceil = CeilList.findCeil(message.ceilId);
-        var player = ceil.getPlayer();
-        var ws = player.getWs();
+        var playerId = ceil.getPlayerId();
+        var ws = UserList.findUser(playerId).getWs();
         ws.send(JSON.stringify(BackApi.TransmitData(message.data)));
     };
 

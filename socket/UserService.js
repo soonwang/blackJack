@@ -4,6 +4,7 @@
 var uuid = require('node-uuid');
 var User = require('../bean/User');
 var UserList = require('../model/UserList');
+var CeilList = require('../model/CeilList');
 var Const = require('../utils/Const');
 var BackApi = require('../routes/BackApi');
 var BroadcastService = require('./BroadcastService');
@@ -36,8 +37,12 @@ var UserService = (function() {
         var user = User(uuid.v1(), data.nickname, ws);
         
         UserList.addUser(user);
-        
-        var data = BackApi.LoginBack(user.getId(), user.getNickname());
+        //获取所有房间，并在房间中添加庄家的昵称
+        var ceilList = CeilList.getAllCeil();
+        ceilList.map(function(ceil) {
+            ceil.blankerNickname = UserList.findUser(ceil.getBlankerId()).getNickname();
+        });
+        var data = BackApi.LoginBack(user.getId(), user.getNickname(), ceilList);
         ws.send(JSON.stringify(data));
         //广播
         BroadcastService.updateUser(user.getId(), 'add');

@@ -14,9 +14,9 @@ var BroadcastService = (function(){
            user.getWs().send(JSON.stringify(data));
         });
     };
-    var addCeil = function(ceil, blankerNickname) {
+    var addCeil = function(ceil) {
         var userList = UserList.getAllUser();
-        var data = BackApi.AddCeilBroad(ceil, blankerNickname);
+        var data = BackApi.AddCeilBroad(ceil);
         userList.forEach(function(user) {
             user.getWs().send(JSON.stringify(data));
         });

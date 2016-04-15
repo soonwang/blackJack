@@ -37,13 +37,13 @@ gulp.task('images', function() {
 		}))
 		.pipe(gulp.dest('public/images'));
 });
-gulp.task('webserver', function() {
-	gulp.src('./')
-	.pipe(webserver({
-		livereload: true,
-		open: true
-	}));
-});
+// gulp.task('webserver', function() {
+// 	gulp.src('./')
+// 	.pipe(webserver({
+// 		livereload: true,
+// 		open: true
+// 	}));
+// });
 
 gulp.task('watch', function() {
 
@@ -63,4 +63,4 @@ gulp.task('watch', function() {
 	// })
 });
 
-gulp.task('default', ['webserver', 'watch']);
+gulp.task('default', ['watch']);
