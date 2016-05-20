@@ -199,9 +199,13 @@ var View = (function(Request) {
         event.preventDefault();
         var target = event.target || event.srcElement;
         var rootNode = target.parentNode.parentNode.parentNode;
-        var ceilId = rootNode.getAttribute('href');
-        var blankerId = rootNode.getAttribute('title');
-        Request.enterRequest(ceilId, blankerId);
+        if(rootNode.getAttribute('class') === 'notallowed') {
+            event.stopPropagation();
+        } else {
+            var ceilId = rootNode.getAttribute('href');
+            var blankerId = rootNode.getAttribute('title');
+            Request.enterRequest(ceilId, blankerId);
+        }
     };
     //用户点击开始菜单 监听事件
     var beginAction = function() {
@@ -387,7 +391,14 @@ var View = (function(Request) {
                 return '人数已满';
             }
         })();
-        newLi.innerHTML ='<a href="'+ceil.id+'" title="'+ceil.blankerId+'">' +
+        var notallowed = (function(){
+            if(ceil.playerId !== null) {
+                return 'class="notallowed"';
+            } else {
+                return '';
+            }
+        })();
+        newLi.innerHTML ='<a href="'+ceil.id+'" title="'+ceil.blankerId+ '" ' + notallowed +'>' +
                          '<div> ' +
                             '<span class="ws-imgbox">' +
                             '<img src="/images/ceil.jpg" alt="">' +
@@ -408,11 +419,16 @@ var View = (function(Request) {
     var indexUpdateCeil = function(ceil) {
         var lists = ceillistDiv.children[0].children;
         for(var i=0, len=lists.length; i<len; i++) {
-            if(lists[i].children[0].getAttribute('href') === ceil.ceilId) {
-                lists[i].children[0].setAttribute('href', ceil.ceilId);
-                lists[i].children[0].setAttribute('title', ceil.blankerId);
-                if(ceil.playerId != null) {
+            console.log('*_*');
+            if(lists[i].children[0].getAttribute('href') === ceil.id) {
+                // lists[i].children[0].setAttribute('href', ceil.ceilId);
+                // lists[i].children[0].setAttribute('title', ceil.blankerId);
+                if(ceil.playerId !== null) {
                     flag[i].innerText = '人数已满';
+                    lists[i].children[0].setAttribute('class', 'notallowed');
+                } else {
+                    flag[i].innerText = '人数未满';
+                    lists[i].children[0].setAttribute('class', '');
                 }
             }
         }

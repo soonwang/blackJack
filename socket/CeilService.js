@@ -77,8 +77,8 @@ var CeilService = (function() {
     //         blankerId: 'userId
     //     },
     var enterCeil = function(data) {
-
-        var newCeil = Ceil(data.ceilId, data.name, data.blankerId, data.playerId);
+        var name = CeilList.findCeil(data.ceilId).getName();
+        var newCeil = Ceil(data.ceilId, name, data.blankerId, data.playerId);
         CeilList.updateCeil(newCeil);
         var backdata = BackApi.EnterCeilBack(data.ceilId, data.blankerId, data.playerId, data.name);
         var player = UserList.findUser(data.playerId);

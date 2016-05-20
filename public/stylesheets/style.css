@@ -87,12 +87,23 @@ p {
 	display: block;
 	font-size: 0;
 }
+.notallowed {
+	cursor: not-allowed;
+}
 .ws-house-list li .ws-imgbox {
 	display: inline-block;
     width: 100%;
     position: relative;
     overflow: hidden;
     cursor: pointer;
+}
+.ws-house-list li>a.notallowed .ws-imgbox {
+	display: inline-block;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+	opacity: 0.5;
+	cursor: not-allowed;
 }
 .ws-house-list li .ws-mes {
 	background: #fff;

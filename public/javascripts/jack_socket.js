@@ -11,7 +11,6 @@ var jack_socket = (function() {
     ws.onmessage = function(event) {
 
             var json_data = JSON.parse(event.data);
-            console.log("received a json data :" + json_data);
             
             switch (json_data.type) {
                 case Const.RETURN.TYPE.BACK:

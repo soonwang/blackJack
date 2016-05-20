@@ -73,9 +73,7 @@ var UserService = (function() {
      */
     var handleDefault = function() {
         console.log('UserService default...');
-    }
-    
-
+    };
     
     return {
         handle: handle,
