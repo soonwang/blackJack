@@ -187,7 +187,7 @@ var BroadcastService = (function() {
                     View.showMessage(Const.MESSAGE.PLAYER_LOST, 1);
                 }
             } else if(User.getUserType() === 'player') {
-                if(data.useId === Ceil.getBlankerId()) {
+                if(data.userId === Ceil.getBlankerId()) {
                     View.showMessage(Const.MESSAGE.BLANKER_LOST, 1);
                 }
             }
@@ -204,10 +204,11 @@ var BroadcastService = (function() {
     };
     var updateCeil = function(data) {
         View.indexUpdateCeil(data.ceil);
-        if(data.ceil.ceilId === User.getCeilId()) {
+        if(data.ceil.id === User.getCeilId()) {
             if(User.getUserType() === 'blanker') {
+                console.log(data.ceil);
                 if (data.ceil.playerId === null) {
-                    View.showMessage(Const.MESSAGE.PLAYER_EXIT, 1);
+                    View.showMessage(Const.MESSAGE.PLAYER_EXIT, 0);
                 } else if (data.ceil.playerId != null) {
                     View.showMessage(Const.MESSAGE.PLAYER_ENTER, 0);
                 }

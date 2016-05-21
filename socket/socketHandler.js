@@ -13,6 +13,7 @@ var socketHandler = function(ws) {
 
     ws.on('message', function(message) {
         console.log(message);
+
         var jsonMessage = JSON.parse(message);
 
         switch(jsonMessage.type) {
@@ -36,6 +37,17 @@ var socketHandler = function(ws) {
     });
     ws.on('close', function() {
         console.log("closed...");
+        try {
+            var message = {
+                data: {
+                    action: 'close',
+                    userId: ws.userId
+                }
+            };
+            UserService.handle(message, ws);
+        } catch (e) {
+            console.log('ws has no userId');
+        }
     });
 
 };

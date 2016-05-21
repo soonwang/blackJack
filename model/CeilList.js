@@ -17,7 +17,13 @@ var CeilList = (function() {
             }
         });
     };
-
+    var delCeilByBlankId = function(blankId) {
+        ceilList.map(function(ceil) {
+            if(ceil.getBlankerId() === blankId) {
+                ceilList.splice(ceilList.indexOf(ceil), 1);
+            }
+        })
+    };
     var updateCeil = function(newCeil) {
         ceilList.map(function(ceil) {
             if(ceil.getId() === newCeil.getId()) {
@@ -39,6 +45,7 @@ var CeilList = (function() {
     return {
         addCeil: addCeil,
         delCeil: delCeil,
+        delCeilByBlankId: delCeilByBlankId,
         updateCeil: updateCeil,
         findCeil: findCeil,
         getAllCeil: getAllCeil

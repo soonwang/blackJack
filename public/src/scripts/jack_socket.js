@@ -2,7 +2,7 @@
  * Created by wangsong3635 on 2016/4/9.
  */
 var jack_socket = (function() {
-    var ws = new WebSocket('ws://121.42.203.122:4080');
+    var ws = new WebSocket('ws://127.0.0.1:4080');
 
     ws.onopen = function() {
         console.log("连接到服务器");

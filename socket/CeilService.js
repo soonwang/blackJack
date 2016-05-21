@@ -96,13 +96,14 @@ var CeilService = (function() {
     //     },
 
     var exitCeil = function(data) {
-        var newCeil = Ceil(data.ceilId, data.name, data.blankerId, null);
-        CeilList.updateCeil(newCeil);
+        var oldCeil = CeilList.findCeil(data.ceilId);
+        oldCeil.setPlayerId(null);
+        CeilList.updateCeil(oldCeil);
         var backdata = BackApi.ExitCeilBack();
         var player = UserList.findUser(data.playerId);
         player.getWs().send(JSON.stringify(backdata));
         //广播
-        BroadcastService.updateCeil(newCeil);
+        BroadcastService.updateCeil(oldCeil);
     };
 
     var handleDefault = function () {

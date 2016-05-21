@@ -33,14 +33,23 @@ var UserService = (function() {
     //         nickname: 'nickname'
     //     }
     var addUser = function(data, ws) {
-        
-        var user = User(uuid.v1(), data.nickname, ws);
+        var userId = uuid.v1();
+        try {
+            ws.userId = userId;
+        } catch (e) {
+            console.log('ws userId 添加失败');
+        }
+        var user = User(userId, data.nickname, ws);
         
         UserList.addUser(user);
         //获取所有房间，并在房间中添加庄家的昵称
         var ceilList = CeilList.getAllCeil();
         ceilList.map(function(ceil) {
-            ceil.blankerNickname = UserList.findUser(ceil.getBlankerId()).getNickname();
+            var blanker = UserList.findUser(ceil.getBlankerId());
+            if(blanker == undefined) {
+                console.log(ceil);
+            }
+            ceil.blankerNickname = blanker !== undefined ? blanker.getNickname() : null;
         });
         var data = BackApi.LoginBack(user.getId(), user.getNickname(), ceilList);
         ws.send(JSON.stringify(data));
@@ -57,15 +66,12 @@ var UserService = (function() {
     //         userId: 'useId'
     //     },
     var delUser = function (data) {
+        //UserList 删除用户
         UserList.delUser(data.userId);
+        //CeilList 删除庄家是用户的ceil
+        CeilList.delCeilByBlankId(data.userId);
         //广播
         BroadcastService.updateUser(data.userId, 'delete');
-    };
-    var delUserByWs = function (ws) {
-        var userId = UserList.findUserByWs(ws);
-        UserList.delUser(userId);
-        //广播
-        BroadcastService.updateUser(userId, 'delete');
     };
 
     /**
@@ -76,8 +82,7 @@ var UserService = (function() {
     };
     
     return {
-        handle: handle,
-        delUserByWs: delUserByWs
+        handle: handle
     };
 
 })();
