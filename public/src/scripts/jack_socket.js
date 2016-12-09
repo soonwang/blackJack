@@ -7,11 +7,11 @@ var jack_socket = (function() {
     ws.onopen = function() {
         console.log("连接到服务器");
     };
-
+    
     ws.onmessage = function(event) {
 
             var json_data = JSON.parse(event.data);
-            
+
             switch (json_data.type) {
                 case Const.RETURN.TYPE.BACK:
                     ReturnBackService.handle(json_data);
