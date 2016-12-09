@@ -79,7 +79,7 @@ var View = (function(Request) {
         restoreCardAndScore();
         //禁用stand、hit
         // activeStandAndHit();
-        // lockStandAndHit();
+        lockStandAndHit();
         //显示开始、退出按钮
         showBeginAndExit();
         EventUtil.addHandler(exitBtn, 'click', Request.exitRequest);
@@ -170,10 +170,19 @@ var View = (function(Request) {
 
         messageDiv.setAttribute('class', 'ws-hide');
         console.log('next: '+ next);
-        if(next) {
-            showIndex();
-        } else {
-            begin();
+        switch (next) {
+            case 0:
+                begin();
+                break;
+            case 1:
+                showIndex();
+                break;
+            case 2:
+                break;
+            default:
+                begin();
+                break;
+
         }
     };
     var loginAction = function(event) {
@@ -379,8 +388,8 @@ var View = (function(Request) {
     };
     var showCeilList = function(showCeilList) {
         showCeilList.map(function(ceil) {
-           indexAddCeil(ceil); 
-        });  
+           indexAddCeil(ceil);
+        });
     };
     var indexAddCeil = function(ceil) {
         var newLi = document.createElement('li');

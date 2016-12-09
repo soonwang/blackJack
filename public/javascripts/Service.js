@@ -210,7 +210,7 @@ var BroadcastService = (function() {
                 if (data.ceil.playerId === null) {
                     View.showMessage(Const.MESSAGE.PLAYER_EXIT, 0);
                 } else if (data.ceil.playerId != null) {
-                    View.showMessage(Const.MESSAGE.PLAYER_ENTER, 0);
+                    View.showMessage(Const.MESSAGE.PLAYER_ENTER, 2);
                 }
             }
         }
